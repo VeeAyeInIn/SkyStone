@@ -7,7 +7,7 @@ import android.support.annotation.NonNull;
  * @author Connor Vann
  * <p>
  * The purpose of the class is to provide a pseudo-constant value available to any form of data. The
- * usage of the generic type {@link T} is a placeholder for an extension of {@link Object}, and is
+ * usage of the generic type is a placeholder for an extension of {@link Object}, and is
  * thus applicable to anything.
  * <p>
  * When using this class, keep in mind that editing values are not permitted, and will result in an
