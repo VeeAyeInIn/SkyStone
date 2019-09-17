@@ -21,7 +21,7 @@ apply plugin: 'com.android.application'
 
 android {
 
-    compileSdkVersion 28
+    compileSdkVersion 29
 
     signingConfigs {
         debug {
@@ -36,10 +36,11 @@ android {
         noCompress "tflite"
     }
 
+    //noinspection GroovyDocCheck
     defaultConfig {
         applicationId 'com.qualcomm.ftcrobotcontroller'
         minSdkVersion 19
-        targetSdkVersion 26
+        targetSdkVersion 29
 
         /**
          * We keep the versionCode and versionName of robot controller applications in sync with
@@ -53,7 +54,7 @@ android {
          * @see <a href="http://developer.android.com/tools/building/configuring-gradle.html">Configure Your Build</a>
          * @see <a href="http://developer.android.com/tools/publishing/versioning.html">Versioning Your App</a>
          */
-        def manifestFile = project(':FtcRobotController').file('src/main/AndroidManifest.xml');
+        def manifestFile = project(':FtcRobotController').file('src/main/AndroidManifest.xml')
         def manifestText = manifestFile.getText()
         //
         def vCodePattern = Pattern.compile("versionCode=\"(\\d+(\\.\\d+)*)\"")
@@ -62,7 +63,7 @@ android {
         def vCode = Integer.parseInt(matcher.group(1))
         //
         def vNamePattern = Pattern.compile("versionName=\"(.*)\"")
-        matcher = vNamePattern.matcher(manifestText);
+        matcher = vNamePattern.matcher(manifestText)
         matcher.find()
         def vName = matcher.group(1)
         //
@@ -91,8 +92,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     sourceSets.main {
