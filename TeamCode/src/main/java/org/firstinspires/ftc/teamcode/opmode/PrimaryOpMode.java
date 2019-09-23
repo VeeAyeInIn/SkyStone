@@ -1,8 +1,12 @@
 package org.firstinspires.ftc.teamcode.opmode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.util.Instance;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author NOTN Programming Team
@@ -14,6 +18,11 @@ public final class PrimaryOpMode extends OpMode {
 
     private static final Instance<PrimaryOpMode> INSTANCE = new Instance<>();
 
+    private final Map<String, DcMotor> motorMap;
+
+    private double x; // X position of the joystick
+    private double y; // Y position of the joystick
+
     /**
      * Default constructor to initiate storage of its instance.
      */
@@ -21,6 +30,7 @@ public final class PrimaryOpMode extends OpMode {
         // Instance is now tied to this. If you were to create a new version of this class, an error
         // would be thrown as it would attempt to store an instance when it is already assigned.
         INSTANCE.store(this);
+        motorMap = new HashMap<>();
     }
 
     /**
@@ -50,6 +60,16 @@ public final class PrimaryOpMode extends OpMode {
     @Override
     public void init() {
         newStatus("Initialized");
+
+        motorMap.put("leftFront", hardwareMap.dcMotor.get("leftFront"));
+        motorMap.put("leftBack", hardwareMap.dcMotor.get("leftBack"));
+        motorMap.put("rightFront", hardwareMap.dcMotor.get("rightFront"));
+        motorMap.put("rightBack", hardwareMap.dcMotor.get("rightBack"));
+
+        for (DcMotor motor : motorMap.values()) {
+            motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
     }
 
     /**
@@ -59,7 +79,16 @@ public final class PrimaryOpMode extends OpMode {
      */
     @Override
     public void loop() {
+        for (DcMotor motor : motorMap.values()) {
+            telemetry.addData(motor.getDeviceName() + " position", motor.getCurrentPosition());
+        }
 
+        // -1.0 to 1.0
+        x = gamepad1.left_stick_x; // Updated X Position
+        y = gamepad1.left_stick_y; // Updated Y Position
+
+        if (Math.abs(x) < 0.1) x = 0; // Dead-Zone of 0.1
+        if (Math.abs(y) < 0.1) y = 0; // Dead-Zone of 0.1
     }
 
     /**
