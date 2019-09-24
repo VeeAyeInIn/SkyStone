@@ -28,7 +28,7 @@ public final class AutonomousTask extends LinearOpMode {
     private final TFObjectDetector tfod;
 
     // Keep track of time
-    private final ElapsedTime time = new ElapsedTime();
+    private final ElapsedTime time;
 
     /**
      * Default constructor to initiate storage of its instance, along with basic initialization
@@ -52,9 +52,12 @@ public final class AutonomousTask extends LinearOpMode {
             tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, localizer);
             tfod.loadModelFromAsset(TFOD_MODEL_ASSET, TFOD_STONE_ASSET, TFOD_SKYSTONE_ASSET);
         } else {
-            tfod = null;
-            telemetry.addData("Error@" + hashCode(), "TFOD Detector could not be created.");
+            // Identify error to the class
+            telemetry.addData("Error@" + getClass().getCanonicalName(), "TFOD Detector could not be created.");
+            tfod = null; // We can't do anything else, but we MUST assign a value to it
         }
+
+        time = new ElapsedTime();
     }
 
     /**
@@ -77,5 +80,17 @@ public final class AutonomousTask extends LinearOpMode {
         // Wait until the START button has been pressed
         waitForStart();
         time.reset();
+    }
+
+    /**
+     * Moves the robot in the specified direction, along with a determined power and for the passed
+     * amount of milliseconds.
+     *
+     * @param direction
+     * @param power
+     * @param timeMs
+     */
+    private void move(String direction, double power, double timeMs) {
+
     }
 }

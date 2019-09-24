@@ -61,11 +61,13 @@ public final class PrimaryOpMode extends OpMode {
     public void init() {
         newStatus("Initialized");
 
+        // Setup the motors by their name
         motorMap.put("leftFront", hardwareMap.dcMotor.get("leftFront"));
         motorMap.put("leftBack", hardwareMap.dcMotor.get("leftBack"));
         motorMap.put("rightFront", hardwareMap.dcMotor.get("rightFront"));
         motorMap.put("rightBack", hardwareMap.dcMotor.get("rightBack"));
 
+        // For each motor, STOP, RESET, then RUN the ENCODER
         for (DcMotor motor : motorMap.values()) {
             motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -79,6 +81,8 @@ public final class PrimaryOpMode extends OpMode {
      */
     @Override
     public void loop() {
+
+        // For each motor, update the displayed position
         for (DcMotor motor : motorMap.values()) {
             telemetry.addData(motor.getDeviceName() + " position", motor.getCurrentPosition());
         }
