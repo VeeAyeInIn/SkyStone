@@ -1,12 +1,21 @@
 package org.firstinspires.ftc.teamcode.opmode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+import org.firstinspires.ftc.teamcode.util.Direction;
 import org.firstinspires.ftc.teamcode.util.Instance;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author NOTN Programming Team
@@ -29,6 +38,9 @@ public final class AutonomousTask extends LinearOpMode {
 
     // Keep track of time
     private final ElapsedTime time;
+
+    // Hardware
+    private final Map<String, DcMotor> motorMap;
 
     /**
      * Default constructor to initiate storage of its instance, along with basic initialization
@@ -58,6 +70,7 @@ public final class AutonomousTask extends LinearOpMode {
         }
 
         time = new ElapsedTime();
+        motorMap = new HashMap<>();
     }
 
     /**
@@ -74,12 +87,26 @@ public final class AutonomousTask extends LinearOpMode {
      */
     @Override
     public void runOpMode() {
+
         // Preform startup actions here that should not be done within the constructor
-        // . . .
+        // Setup the motors by their name
+        motorMap.put("leftFront", hardwareMap.dcMotor.get("leftFront"));
+        motorMap.put("leftBack", hardwareMap.dcMotor.get("leftBack"));
+        motorMap.put("rightFront", hardwareMap.dcMotor.get("rightFront"));
+        motorMap.put("rightBack", hardwareMap.dcMotor.get("rightBack"));
+
+        // For each motor, STOP, RESET, then RUN the ENCODER
+        for (DcMotor motor : motorMap.values()) {
+            motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
 
         // Wait until the START button has been pressed
         waitForStart();
         time.reset();
+        tfod.activate();
+
+        // NAVIGATION
     }
 
     /**
@@ -90,7 +117,51 @@ public final class AutonomousTask extends LinearOpMode {
      * @param power
      * @param timeMs
      */
-    private void move(String direction, double power, double timeMs) {
+    private void move(Direction direction, double power, double timeMs) {
 
+    }
+
+    /**
+     * Get the current list of {@link Recognition}.
+     *
+     * @return the list of {@link Recognition}
+     */
+    private strictfp List<Recognition> getImage() {
+        List<Recognition> recognitions = new ArrayList<>();
+
+        // If TFOD has been assigned
+        if (tfod != null) {
+
+            // Then get recognitions
+            recognitions = tfod.getUpdatedRecognitions();
+
+            // If there are recognitions
+            if (recognitions != null) {
+                final int size = recognitions.size();
+                int stone = 0;
+                int skystone = 0;
+
+                // Iterate through each recognition
+                for (Recognition rec : recognitions) {
+
+                    // Adding what we found
+                    if (rec.getLabel().equals(TFOD_STONE_ASSET)) {
+                        stone++;
+                    } else if (rec.getLabel().equals(TFOD_SKYSTONE_ASSET)) {
+                        skystone++;
+                    }
+
+                    // Get center of the object
+                    // (rec.getLeft() + rec.getRight()) / 2;
+                }
+
+                telemetry.addData("Stone Count", stone);
+                telemetry.addData("SkyStone Count", skystone);
+            } else {
+                // TODO error if null recognition
+            }
+        }
+
+        return Collections.unmodifiableList(recognitions);
     }
 }
