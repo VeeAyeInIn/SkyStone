@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
@@ -153,6 +154,8 @@ public final class AutonomousTask extends LinearOpMode {
 
                     // Get center of the object
                     // (rec.getLeft() + rec.getRight()) / 2;
+
+                    double angle = rec.estimateAngleToObject(AngleUnit.DEGREES);
                 }
 
                 telemetry.addData("Stone Count", stone);
