@@ -23,7 +23,7 @@ public final class PrimaryOpMode extends OpMode {
     private double x; // X position of the joystick
     private double y; // Y position of the joystick
     private double rotation; // Rotational value
-    private double speedMultiplier;
+    private int speedMultiplier; //Speed Multiplier
 
     /**
      * Default constructor to initiate storage of its instance.
@@ -92,11 +92,21 @@ public final class PrimaryOpMode extends OpMode {
         // -1.0 to 1.0
         x = gamepad1.left_stick_x; // Updated X Position
         y = gamepad1.left_stick_y; // Updated Y Position
-        if (gamepad1.right_trigger>0.5) rotation=1;       // Set r positive with a buffer zone
-        else if (gamepad1.left_trigger>0.5) rotation=-1; // Set r negative with a buffer zone
+
+        if (gamepad1.right_trigger>0.3) rotation = 1 * gamepad1.right_trigger;       // Set r positive with a buffer zone
+        else if (gamepad1.left_trigger>0.3) rotation = -1 * gamepad1.left_trigger; // Set r negative with a buffer zone
 
         if (Math.abs(x) < 0.1) x = 0; // Dead-Zone of 0.1
         if (Math.abs(y) < 0.1) y = 0; // Dead-Zone of 0.1
+
+        if (1 <= speedMultiplier && speedMultiplier <= 2) {
+            if (gamepad1.dpad_up){
+                speedMultiplier = 2;
+            }
+            if (gamepad1.dpad_down){
+                speedMultiplier = 1;
+            }
+        }
 
         if (rotation != 0) {
             try {
