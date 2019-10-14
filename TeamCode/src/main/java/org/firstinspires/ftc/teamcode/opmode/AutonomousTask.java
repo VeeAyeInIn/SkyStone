@@ -108,18 +108,32 @@ public final class AutonomousTask extends LinearOpMode {
         tfod.activate();
 
         // NAVIGATION
+        boolean cycle = true;
+        while (cycle) {
+            for (Recognition recognition : getImage()) {
+                if (recognition.getLabel().equals(TFOD_SKYSTONE_ASSET)) {
+                    cycle = false;
+                    break;
+                }
+            }
+            // Action
+        }
+
+        // We have located a SkyStone, now we need to take necessary actions
     }
 
     /**
      * Moves the robot in the specified direction, along with a determined power and for the passed
      * amount of milliseconds.
      *
-     * @param direction
-     * @param power
-     * @param timeMs
+     * @param direction what direction to move the robot in
+     * @param power how much the motors will move
+     * @param timeMs time in milliseconds to move
      */
     private void move(Direction direction, double power, double timeMs) {
-
+        for (Map.Entry<String, DcMotor> entry : motorMap.entrySet()) {
+            entry.getValue().setPower(power);
+        }
     }
 
     /**
@@ -134,11 +148,10 @@ public final class AutonomousTask extends LinearOpMode {
         if (tfod != null) {
 
             // Then get recognitions
-            recognitions = tfod.getUpdatedRecognitions();
+            recognitions.addAll(tfod.getUpdatedRecognitions());
 
             // If there are recognitions
-            if (recognitions != null) {
-                final int size = recognitions.size();
+            if (!recognitions.isEmpty()) {
                 int stone = 0;
                 int skystone = 0;
 
