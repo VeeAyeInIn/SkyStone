@@ -9,8 +9,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
-import org.firstinspires.ftc.teamcode.util.Direction;
-import org.firstinspires.ftc.teamcode.util.Instance;
+import org.firstinspires.ftc.teamcode.archive.util.Direction;
+import org.firstinspires.ftc.teamcode.archive.util.Instance;
 
 import java.util.ArrayList;
 import java.util.Collections;
