@@ -80,13 +80,9 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 @Disabled // This means it is not a valid OpMode, and it will not be used
 public class ExampleOpMode extends OpMode {
 
-    // These are constants so the naming convention is all caps and underscores
-    private static final int RIGHT = 0;
-    private static final int FORWARDS = 1;
-    private static final int LEFT = 2;
-    private static final int BACKWARDS = 3;
     // Keep track of how much time has elapsed
     private ElapsedTime elapsed;
+
     // Our functional motors
     private DcMotor frontRight;
     private DcMotor frontLeft;
@@ -115,10 +111,6 @@ public class ExampleOpMode extends OpMode {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
     }
-
-    /*
-     * Movement Handling
-     */
 
     @Override
     public void init_loop() {
@@ -167,26 +159,21 @@ public class ExampleOpMode extends OpMode {
     }
 
     /**
-     * Moves the robot.
+     * Moves the robot either forward (positive power) or backward (negative power)
      *
-     * @param direction what direction to move in, represented as an integer value
-     * @param power     how powerful to set the motors when moving
-     * @param timeMs    how long (in milliseconds) to move
+     * @param power  how powerful to set the motors
+     * @param timeMs how long (in milliseconds) to move
      */
-    public void move(int direction, double power, long timeMs) {
-        switch (direction) {
-            case RIGHT:
-                break;
-            case FORWARDS:
-                break;
-            case LEFT:
-                break;
-            case BACKWARDS:
-                break;
-            default: // In case something else happens
-                telemetry.addData("Error: " + elapsed.toString(), "Invalid Directional Value " + direction);
-                break;
+    public void move(double power, long timeMs) {
+        setPowers(power);
+
+        try {
+            Thread.sleep(timeMs);
+        } catch (InterruptedException e) {
+            error(e.getMessage());
         }
+
+        setPowers(0);
     }
 
     /**
@@ -213,15 +200,15 @@ public class ExampleOpMode extends OpMode {
         }
 
         // Stop rotating
-        this.setAllPowers(0);
+        this.setPowers(0);
     }
 
     /**
      * Sets all the motors' powers to a equal value.
      *
-     * @param power the new power
+     * @param power the new uniform power
      */
-    public void setAllPowers(double power) {
+    public void setPowers(double power) {
         frontRight.setPower(power);
         frontLeft.setPower(power);
         backRight.setPower(power);
@@ -241,46 +228,6 @@ public class ExampleOpMode extends OpMode {
         frontLeft.setPower(frontLeftPower);
         backRight.setPower(backRightPower);
         backLeft.setPower(backLeftPower);
-    }
-
-    /**
-     * Sets the front motors' powers
-     *
-     * @param power the new power
-     */
-    public void setFrontPowers(double power) {
-        frontRight.setPower(power);
-        frontLeft.setPower(power);
-    }
-
-    /**
-     * Sets the back motors' powers
-     *
-     * @param power the new power
-     */
-    public void setBackPowers(double power) {
-        backRight.setPower(power);
-        backLeft.setPower(power);
-    }
-
-    /**
-     * Sets the right motors' powers
-     *
-     * @param power the new power
-     */
-    public void setRightPowers(double power) {
-        frontRight.setPower(power);
-        backRight.setPower(power);
-    }
-
-    /**
-     * Sets the left motors' powers
-     *
-     * @param power the new power
-     */
-    public void setLeftPowers(double power) {
-        frontLeft.setPower(power);
-        backLeft.setPower(power);
     }
 
     /*
