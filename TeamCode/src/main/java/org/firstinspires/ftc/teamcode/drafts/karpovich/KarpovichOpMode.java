@@ -118,6 +118,18 @@ public class KarpovichOpMode extends OpMode{
             motorMap.get ("leftFront").setPower(y * speedMultiplier - x * speedMultiplier);
             motorMap.get ("leftBack").setPower(y * speedMultiplier + x * speedMultiplier);
         }
+
+        if(/*gamepad2.BUTTON*/) {
+            //Move Arm
+        }
+
+        if(/*gamepad2.BUTTON*/) {
+            //Grab Block
+        }
+
+        if(/*gamepad2.BUTTON*/) {
+            //Rotate Block
+        }
     }
 
     /**
