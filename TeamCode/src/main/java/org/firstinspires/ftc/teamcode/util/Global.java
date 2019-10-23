@@ -1,44 +1,20 @@
 package org.firstinspires.ftc.teamcode.util;
 
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-
 /**
- * @author Connor Vann
+ * Contains global constants
  */
-public final class Global {
+public class Global {
 
-    private static OpMode opMode;
+    // Vuforia Key needed for activation
+    private static final String VUFORIA_KEY = "AbyhPYH/////AAABmVllNwWWaUnSozzaWrSP7kuAOpem63iiGDaZXW1b7zxbWr5h4qHCM4YqWKiRliNBlApeot38Nz3iQxRPGeIKlPlEtRbZXBY4nstLBf5mPFHwpq6Ajsr/3G60eThr4G+9KolTe30N2MHtfO0G7PkxkzP7wRPf8fji8+CMCvOxE19ZY6YF0L9MJEK+/p6JiXWO7E97kKcGlcfO85ipV5mC5JL9LVYOcVc5KvjkAwQiteEasU3Fv8kW/s4C1f/HPNqvF9I3jgyNz6HdxF/4OCic6nlJITNiTkKMTOeHYp65SXkFUYDsRKeTEvKQtTOe4Qkn6bmY2jhN2/EU1HC1JIOJ3kTVhsGZ8bWEzKA6aJ5CNuUa";
 
-    /**
-     * Initializes the global values that can be accessed by others.
-     *
-     * @param opMode get data from this {@link OpMode}
-     */
-    public static void init(OpMode opMode) {
-        Global.opMode = opMode;
-    }
+    // How we refer to TFOD models
+    private static final String TFOD_MODEL_ASSET = "Skystone.tflite";
+    private static final String TFOD_STONE_ASSET = "Stone";
+    private static final String TFOD_SKYSTONE_ASSET = "Skystone";
 
-    /**
-     * Flushes the data from the global values.
-     */
-    public static void flush() {
-        opMode = null;
-    }
-
-    public static void getRobotPosition() {
-        // TODO implement a getter for the robot position
-    }
-
-    public static void getRobotStatus() {
-        // TODO implement a getter to retrieve a string from telemetry
-    }
-
-    /**
-     * Checks if the global values were initialized.
-     *
-     * @return initialization status
-     */
-    public static boolean isInitialized() {
-        return opMode != null;
-    }
+    // Stone measurements in inches
+    private static final int STONE_LENGTH = 4;
+    private static final int STONE_WIDTH = 8;
+    private static final int STONE_HEIGHT = 4;
 }

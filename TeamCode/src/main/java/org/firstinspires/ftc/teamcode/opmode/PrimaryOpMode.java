@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.opmode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.teamcode.util.Instance;
+import org.firstinspires.ftc.teamcode.archive.util.Instance;
 
 import java.util.HashMap;
 import java.util.Map;

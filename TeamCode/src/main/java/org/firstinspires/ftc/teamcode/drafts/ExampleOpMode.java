@@ -135,7 +135,22 @@ public class ExampleOpMode extends OpMode {
     }
 
     @Override
-    public void loop() {
+    public strictfp void loop() {
+
+        // Our values, where the joystick is
+        double x = Math.abs(gamepad1.left_stick_x) > 0.1 ? gamepad1.left_stick_x : 0;
+        double y = Math.abs(gamepad1.left_stick_y) > 0.1 ? gamepad1.left_stick_y : 0;
+
+        // Rotation based on how much the triggers are pressed
+        double rotate; // Wait to assign
+        if (gamepad1.left_trigger > gamepad1.right_trigger) {
+            rotate = gamepad1.left_trigger > 0.1 ? gamepad1.left_trigger : 0;
+        } else {
+            rotate = gamepad1.right_trigger > 0.1 ? gamepad1.right_trigger : 0;
+        }
+
+        move(x, 10);
+        rotate(rotate, 10);
 
         // Display how much time has elapsed
         telemetry.addData("Elapsed Time", elapsed.toString());
