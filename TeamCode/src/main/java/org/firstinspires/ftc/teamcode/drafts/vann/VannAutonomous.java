@@ -13,6 +13,16 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 public class VannAutonomous extends LinearOpMode {
 
+    // (Constants) Directional Values
+    private static byte NORTH_RIGHT = 0x0; // nr
+    private static byte NORTH_LEFT = 0x1; // nl
+    private static byte SOUTH_RIGHT = 0x2; // sr
+    private static byte SOUTH_LEFT = 0x3; // sl
+    private static byte EAST_RIGHT = 0x4; // er
+    private static byte EAST_LEFT = 0x5; // el
+    private static byte WEST_RIGHT = 0x6; // wr
+    private static byte WEST_LEFT = 0x7; // wl
+
     // We can load TFOD assets through this
     private static final String TFOD_MODEL_ASSET = "Skystone.tflite";
     private static final String TFOD_STONE_ASSET = "Stone";

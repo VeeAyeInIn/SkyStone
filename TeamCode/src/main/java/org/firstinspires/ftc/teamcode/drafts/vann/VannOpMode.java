@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.drafts.vann;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
+
 /**
  * @author Connor Vann
  */
@@ -17,12 +19,15 @@ public class VannOpMode extends Robot {
 
     @Override
     public void start() {
-
+        setModes(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        pause(1000); // Wait 1 second
+        setModes(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     @Override
     public void loop() {
-        // BOOLEAN CONDITION ? IF TRUE THEN THIS : IF FALSE THEN THIS
+
+        //         BOOLEAN CONDITION                     ? IF TRUE THEN THIS     : IF FALSE THEN THIS
         double x = Math.abs(gamepad1.left_stick_x) > 0.1 ? gamepad1.left_stick_x : 0; // Strafing
         double y = Math.abs(gamepad1.left_stick_y) > 0.1 ? gamepad1.left_stick_y : 0; // Movement
 
@@ -32,6 +37,8 @@ public class VannOpMode extends Robot {
         } else {
             rotate = 0;
         }
+
+        // Will prioritise rotation over movement
 
         if (rotate == 0) {
             // Then move
@@ -46,10 +53,13 @@ public class VannOpMode extends Robot {
             // Else rotate
             setPowers(-rotate, rotate, -rotate, rotate);
         }
+
+        // Make sure everything updates nearly real-time
+        telemetry.update();
     }
 
     @Override
     public void stop() {
-
+        setModes(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 }

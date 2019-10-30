@@ -144,4 +144,21 @@ public abstract class Robot extends OpMode {
     protected Telemetry.Item error(Exception e) {
         return error(e.getMessage());
     }
+
+    /**
+     * Makes the program wait for a set amount of time.
+     *
+     * @param milliseconds how many milliseconds to wait for
+     */
+    protected void pause(long milliseconds) {
+        try {
+            Thread.sleep(milliseconds);
+        } catch (InterruptedException e) {
+            error(e);
+        }
+    }
+
+    protected Telemetry.Item updateStatus(String status) {
+        return telemetry.addData("Status", status);
+    }
 }
