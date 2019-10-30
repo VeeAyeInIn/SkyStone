@@ -158,6 +158,12 @@ public abstract class Robot extends OpMode {
         }
     }
 
+    /**
+     * Updates the robot status.
+     *
+     * @param status The [new] status to display
+     * @return the telemetry object
+     */
     protected Telemetry.Item updateStatus(String status) {
         return telemetry.addData("Status", status);
     }

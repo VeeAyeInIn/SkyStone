@@ -9,7 +9,8 @@ public class VannOpMode extends Robot {
 
     @Override
     public void init() {
-
+        updateStatus("Initialized");
+        telemetry.update();
     }
 
     @Override
@@ -19,6 +20,7 @@ public class VannOpMode extends Robot {
 
     @Override
     public void start() {
+        updateStatus("Started");
         setModes(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         pause(1000); // Wait 1 second
         setModes(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -61,5 +63,7 @@ public class VannOpMode extends Robot {
     @Override
     public void stop() {
         setModes(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        updateStatus("Stopped");
+        telemetry.update();
     }
 }
