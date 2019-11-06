@@ -8,10 +8,26 @@ import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 public class VannAutonomous extends LinearOpMode {
+
+    // (Constants) Directional Values
+    private final int TARGET_ELEMENT = 0;
+    private final int BRIDGE_BLUE_REAR = 1;
+    private final int BRIDGE_RED_REAR = 2;
+    private final int BRIDGE_BLUE_FRONT = 3;
+    private final int BRIDGE_RED_FRONT = 4;
+    private final int RED_PERIMETER_1 = 5;
+    private final int RED_PERIMETER_2 = 6;
+    private final int FRONT_PERIMETER_1 = 7;
+    private final int FRONT_PERIMETER_2 = 8;
+    private final int BLUE_PERIMETER_1 = 9;
+    private final int BLUE_PERIMETER_2 = 10;
+    private final int REAR_PERIMETER_1 = 11;
+    private final int REAR_PERIMETER_2 = 12;
 
     // We can load TFOD assets through this
     private static final String TFOD_MODEL_ASSET = "Skystone.tflite";
@@ -20,6 +36,7 @@ public class VannAutonomous extends LinearOpMode {
 
     // Vuforia
     private final VuforiaLocalizer.Parameters parameters;
+    private final VuforiaTrackables trackables;
     private final VuforiaLocalizer localizer;
 
     // Tensor Flow Object Detection
@@ -46,8 +63,8 @@ public class VannAutonomous extends LinearOpMode {
 
         parameters = new VuforiaLocalizer.Parameters();
         parameters.vuforiaLicenseKey = "AbyhPYH/////AAABmVllNwWWaUnSozzaWrSP7kuAOpem63iiGDaZXW1b7zxbWr5h4qHCM4YqWKiRliNBlApeot38Nz3iQxRPGeIKlPlEtRbZXBY4nstLBf5mPFHwpq6Ajsr/3G60eThr4G+9KolTe30N2MHtfO0G7PkxkzP7wRPf8fji8+CMCvOxE19ZY6YF0L9MJEK+/p6JiXWO7E97kKcGlcfO85ipV5mC5JL9LVYOcVc5KvjkAwQiteEasU3Fv8kW/s4C1f/HPNqvF9I3jgyNz6HdxF/4OCic6nlJITNiTkKMTOeHYp65SXkFUYDsRKeTEvKQtTOe4Qkn6bmY2jhN2/EU1HC1JIOJ3kTVhsGZ8bWEzKA6aJ5CNuUa";
-
         localizer = ClassFactory.getInstance().createVuforia(parameters);
+        trackables = localizer.loadTrackablesFromAsset("SkyStone");
 
         // Tensor Flow Object Detector :: Initialization of Detector
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
