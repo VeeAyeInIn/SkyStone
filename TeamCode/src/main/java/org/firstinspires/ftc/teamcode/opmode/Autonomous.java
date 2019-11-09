@@ -18,7 +18,7 @@ import java.util.Calendar;
  * A framework for creating a customized Autonomous class, this class will give you the means to do
  * so, however its up to you for the specifics.
  */
-public abstract class Autonomous extends LinearOpMode {
+public abstract class Autonomous extends LinearOpMode implements Moveable {
 
     // We can load TFOD assets through this
     public static final String TFOD_MODEL_ASSET = "Skystone.tflite";
@@ -42,7 +42,7 @@ public abstract class Autonomous extends LinearOpMode {
      * @param vuforiaKey the key being used by the program
      */
     public Autonomous(String vuforiaKey) {
-        super();
+        super(/* Put the Vuforia key here */);
 
         elapsedTime = new ElapsedTime();
 
