@@ -3,15 +3,11 @@ package org.firstinspires.ftc.teamcode.drafts.karpovich;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.teamcode.opmode.PrimaryOpMode;
-import org.firstinspires.ftc.teamcode.util.Instance;
-
 import java.util.HashMap;
 import java.util.Map;
 
-public class KarpovichOpMode extends OpMode{
-}
-    private static final Instance<KarpovichOpMode> INSTANCE = new Instance<>();
+public class KarpovichOpMode extends OpMode {
+
 
     private final Map<String, DcMotor> motorMap;
 
@@ -20,24 +16,8 @@ public class KarpovichOpMode extends OpMode{
     private double rotation; // Rotational value
     private double speedMultiplier; //Speed Multiplier
 
-    /**
-     * Default constructor to initiate storage of its instance.
-     */
-    public KarpovichOpMode() {
-        // Instance is now tied to this. If you were to create a new version of this class, an error
-        // would be thrown as it would attempt to store an instance when it is already assigned.
-        INSTANCE.store(this);
-        motorMap = new HashMap<>();
-    }
 
-    /**
-     * Accesses the static referral to the Object
-     *
-     * @return the static instance
-     */
-    public static KarpovichOpMode getInstance() {
-        return INSTANCE.get();
-    }
+
 
     /**
      * This method loops when the <i>init</i> button is activated.
@@ -84,21 +64,24 @@ public class KarpovichOpMode extends OpMode{
             telemetry.addData(motor.getDeviceName() + " position", motor.getCurrentPosition());
         }
 
-        // -1.0 to 1.0
+        //Set x and y to the joystick x and y -1.0 to 1.0
         x = gamepad1.left_stick_x; // Updated X Position
         y = gamepad1.left_stick_y; // Updated Y Position
 
-        if (gamepad1.right_trigger>0.3) rotation = 1 * gamepad1.right_trigger; // Set r positive with a buffer zone
-        else if (gamepad1.left_trigger>0.3) rotation = -1 * gamepad1.left_trigger; // Set r negative with a buffer zone
+        //Update Rotation Variable
+        if (gamepad1.right_trigger > 0.3)
+            rotation = 1 * gamepad1.right_trigger; // Set r positive with a buffer zone
+        else if (gamepad1.left_trigger > 0.3)
+            rotation = -1 * gamepad1.left_trigger; // Set r negative with a buffer zone
 
         if (Math.abs(x) < 0.1) x = 0; // Dead-Zone of 0.1
         if (Math.abs(y) < 0.1) y = 0; // Dead-Zone of 0.1
 
         if (0.5 < speedMultiplier && speedMultiplier < 1.5) {
-            if (gamepad1.dpad_up){
+            if (gamepad1.dpad_up) {
                 speedMultiplier += 0.5;
             }
-            if (gamepad1.dpad_down){
+            if (gamepad1.dpad_down) {
                 speedMultiplier -= 0.5;
             }
         }
@@ -113,22 +96,30 @@ public class KarpovichOpMode extends OpMode{
             } catch (NullPointerException ignored) { /* Actions if NPE */ }
         } else {
             //Move the robot
-            motorMap.get ("rightFront").setPower(-y * speedMultiplier - x * speedMultiplier);
-            motorMap.get ("rightBack").setPower(-y * speedMultiplier + x * speedMultiplier);
-            motorMap.get ("leftFront").setPower(y * speedMultiplier - x * speedMultiplier);
-            motorMap.get ("leftBack").setPower(y * speedMultiplier + x * speedMultiplier);
+            motorMap.get("rightFront").setPower(-y * speedMultiplier - x * speedMultiplier);
+            motorMap.get("rightBack").setPower(-y * speedMultiplier + x * speedMultiplier);
+            motorMap.get("leftFront").setPower(y * speedMultiplier - x * speedMultiplier);
+            motorMap.get("leftBack").setPower(y * speedMultiplier + x * speedMultiplier);
         }
 
-        if(/*gamepad2.BUTTON*/) {
-            //Move Arm
+        if (gamepad2.left_trigger > 0.2) {
+            moveArm(-1)
+        } else if (gamepad2.right_trigger > 0.2) {
+            moveArm(1);
         }
 
-        if(/*gamepad2.BUTTON*/) {
-            //Grab Block
+        if (gamepad2.dpad_down) {
+            grabBlock(-1);
         }
 
-        if(/*gamepad2.BUTTON*/) {
-            //Rotate Block
+        if (gamepad2.dpad_up) {
+            grabBlock(1);
+        }
+
+        if (gamepad2.left_bumper) {
+            rotateArm(1);
+        } else if (gamepad2.right_bumper) {
+            rotateArm(-1);
         }
     }
 
@@ -161,4 +152,17 @@ public class KarpovichOpMode extends OpMode{
     private void newStatus(String status) {
         telemetry.addData("Status", status);
     }
+
+    public void moveArm(int i) {
+        //Move Arm
+    }
+
+    public void rotateArm(int direction){
+        //Rotate Arm
+    }
+
+    public void grabBlock(int r){
+        //Grab/Release Block
+    }
 }
+
