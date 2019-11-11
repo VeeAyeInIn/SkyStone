@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmode;
+package org.firstinspires.ftc.teamcode.opmode.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -9,8 +9,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
-import org.firstinspires.ftc.teamcode.archive.util.Direction;
-import org.firstinspires.ftc.teamcode.archive.util.Instance;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,8 +20,6 @@ import java.util.Map;
  * @author NOTN Programming Team
  */
 public final class AutonomousTask extends LinearOpMode {
-
-    private static final Instance<AutonomousTask> INSTANCE = new Instance<>();
 
     // We can load TFOD assets through this
     private static final String TFOD_MODEL_ASSET = "Skystone.tflite";
@@ -48,10 +44,6 @@ public final class AutonomousTask extends LinearOpMode {
      * of all variables.
      */
     public AutonomousTask() {
-        // Instance is now tied to this. If you were to create a new version of this class, an error
-        // would be thrown as it would attempt to store an instance when it is already assigned.
-        INSTANCE.store(this);
-
         parameters = new VuforiaLocalizer.Parameters();
         parameters.vuforiaLicenseKey = "AbyhPYH/////AAABmVllNwWWaUnSozzaWrSP7kuAOpem63iiGDaZXW1b7zxbWr5h4qHCM4YqWKiRliNBlApeot38Nz3iQxRPGeIKlPlEtRbZXBY4nstLBf5mPFHwpq6Ajsr/3G60eThr4G+9KolTe30N2MHtfO0G7PkxkzP7wRPf8fji8+CMCvOxE19ZY6YF0L9MJEK+/p6JiXWO7E97kKcGlcfO85ipV5mC5JL9LVYOcVc5KvjkAwQiteEasU3Fv8kW/s4C1f/HPNqvF9I3jgyNz6HdxF/4OCic6nlJITNiTkKMTOeHYp65SXkFUYDsRKeTEvKQtTOe4Qkn6bmY2jhN2/EU1HC1JIOJ3kTVhsGZ8bWEzKA6aJ5CNuUa";
 
@@ -72,15 +64,6 @@ public final class AutonomousTask extends LinearOpMode {
 
         time = new ElapsedTime();
         motorMap = new HashMap<>();
-    }
-
-    /**
-     * Accesses the static referral to the Object.
-     *
-     * @return the static instance
-     */
-    public static AutonomousTask getInstance() {
-        return INSTANCE.get();
     }
 
     /**
@@ -120,20 +103,6 @@ public final class AutonomousTask extends LinearOpMode {
         }
 
         // We have located a SkyStone, now we need to take necessary actions
-    }
-
-    /**
-     * Moves the robot in the specified direction, along with a determined power and for the passed
-     * amount of milliseconds.
-     *
-     * @param direction what direction to move the robot in
-     * @param power how much the motors will move
-     * @param timeMs time in milliseconds to move
-     */
-    private void move(Direction direction, double power, double timeMs) {
-        for (Map.Entry<String, DcMotor> entry : motorMap.entrySet()) {
-            entry.getValue().setPower(power);
-        }
     }
 
     /**

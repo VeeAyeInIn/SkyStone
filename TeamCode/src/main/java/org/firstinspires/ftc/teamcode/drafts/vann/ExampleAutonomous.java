@@ -2,9 +2,14 @@ package org.firstinspires.ftc.teamcode.drafts.vann;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.teamcode.opmode.Autonomous;
+import org.firstinspires.ftc.teamcode.util.Autonomous;
 
 public class ExampleAutonomous extends Autonomous {
+
+    private final DcMotor rightFront;
+    private final DcMotor leftFront;
+    private final DcMotor rightRear;
+    private final DcMotor leftRear;
 
     private final static double DEAD_ZONE = 0.1;
 
@@ -13,6 +18,11 @@ public class ExampleAutonomous extends Autonomous {
      */
     public ExampleAutonomous() {
         super("AbyhPYH/////AAABmVllNwWWaUnSozzaWrSP7kuAOpem63iiGDaZXW1b7zxbWr5h4qHCM4YqWKiRliNBlApeot38Nz3iQxRPGeIKlPlEtRbZXBY4nstLBf5mPFHwpq6Ajsr/3G60eThr4G+9KolTe30N2MHtfO0G7PkxkzP7wRPf8fji8+CMCvOxE19ZY6YF0L9MJEK+/p6JiXWO7E97kKcGlcfO85ipV5mC5JL9LVYOcVc5KvjkAwQiteEasU3Fv8kW/s4C1f/HPNqvF9I3jgyNz6HdxF/4OCic6nlJITNiTkKMTOeHYp65SXkFUYDsRKeTEvKQtTOe4Qkn6bmY2jhN2/EU1HC1JIOJ3kTVhsGZ8bWEzKA6aJ5CNuUa");
+
+        rightFront = hardwareMap.dcMotor.get("rightFront");
+        leftFront = hardwareMap.dcMotor.get("leftFront");
+        rightRear = hardwareMap.dcMotor.get("rightRear");
+        leftRear = hardwareMap.dcMotor.get("leftRear");
     }
 
     /**
@@ -64,6 +74,10 @@ public class ExampleAutonomous extends Autonomous {
     @Deprecated
     public void left(double power, DcMotor... motors) {
         warning("The movement method used is not supported.");
+    }
+
+    public void left(double power) {
+
     }
 
     /**
