@@ -64,6 +64,20 @@ public abstract class Autonomous extends LinearOpMode implements Moveable {
         }
     }
 
+    @Override
+    public void forward(double power, DcMotor... motors) {
+        for (DcMotor motor : motors) {
+            motor.setPower(power);
+        }
+    }
+
+    @Override
+    public void stop(DcMotor... motors) {
+        for (DcMotor motor : motors) {
+            motor.setPower(0);
+        }
+    }
+
     /**
      * Sets the power for each of the defined motors.
      *
