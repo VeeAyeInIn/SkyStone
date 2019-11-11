@@ -36,8 +36,8 @@ public abstract class QuadMecanumAutonomous extends Autonomous {
     }
 
     public void rotate(double power) {
-        forward(power, rightFront, rightRear);
-        forward(-power, leftFront, leftRear);
+        forward(-power, rightFront, rightRear);
+        forward(power, leftFront, leftRear);
     }
 
     public void fullStop() {
