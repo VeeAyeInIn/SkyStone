@@ -2,10 +2,16 @@ package org.firstinspires.ftc.teamcode.util;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+/**
+ * Support for 4-wheel Mecanum drive.
+ */
 public abstract class QuadMecanumAutonomous extends Autonomous {
 
     private final DcMotor rightFront, leftFront, rightRear, leftRear;
 
+    /**
+     * Support for 4-wheel Mecanum drive.
+     */
     public QuadMecanumAutonomous() {
         super(Global.VUFORIA_KEY);
 
@@ -15,6 +21,11 @@ public abstract class QuadMecanumAutonomous extends Autonomous {
         leftRear = hardwareMap.dcMotor.get("leftRear");
     }
 
+    /**
+     * Moves linearly forward (or backwards, given -1 <= power < 0).
+     *
+     * @param power the power (0 <= power <= 1) for the motors to run at
+     */
     public void forward(double power) {
         forward(power, rightFront, leftFront, rightRear, leftFront);
     }
@@ -27,6 +38,10 @@ public abstract class QuadMecanumAutonomous extends Autonomous {
     public void rotate(double power) {
         forward(power, rightFront, rightRear);
         forward(-power, leftFront, leftRear);
+    }
+
+    public void fullStop() {
+        stop(rightFront, leftFront, rightRear, leftRear);
     }
 
     public DcMotor getRightFront() {
