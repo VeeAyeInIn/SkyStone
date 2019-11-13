@@ -1,11 +1,12 @@
 package org.firstinspires.ftc.teamcode.drafts.karpovich;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import java.util.HashMap;
 import java.util.Map;
-
+@TeleOp(name = "DLKTeleOp", group = "TeleOp")
 public class KarpovichOpMode extends OpMode {
 
 

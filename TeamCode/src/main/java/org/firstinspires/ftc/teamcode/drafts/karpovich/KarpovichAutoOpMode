@@ -1,14 +1,16 @@
 package org.firstinspires.ftc.teamcode.drafts.karpovich;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.util.QuadMecanumAutonomous;
 
 import java.util.HashMap;
 import java.util.Map;
-
+@TeleOp(name = "ConnorIsABully", group = "Autonomous")
 public class KarpovichAutoOpMode extends QuadMecanumAutonomous {
 
     private final DcMotor rightFront;
@@ -90,6 +92,31 @@ public class KarpovichAutoOpMode extends QuadMecanumAutonomous {
     //Strafe Left (WIP)
     public void lefty(int power){
         strafe(-power);
+    }
+
+    @Override
+    public void runOpMode() throws InterruptedException {
+
+    }
+
+    @Override
+    public void backward(double power, DcMotor... motors) {
+
+    }
+
+    @Override
+    public void left(double power, DcMotor... motors) {
+
+    }
+
+    @Override
+    public void right(double power, DcMotor... motors) {
+
+    }
+
+    @Override
+    public void rotate(double power, DcMotor... motors) {
+
     }
     /*
     //Move forward
