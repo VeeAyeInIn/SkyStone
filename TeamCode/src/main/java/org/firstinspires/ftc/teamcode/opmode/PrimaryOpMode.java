@@ -51,10 +51,10 @@ public final class PrimaryOpMode extends OpMode {
         newStatus("Initialized");
 
         // Setup the motors by their name
-        motorMap.put("leftFront", hardwareMap.dcMotor.get("leftFront"));
-        motorMap.put("leftBack", hardwareMap.dcMotor.get("leftBack"));
-        motorMap.put("rightFront", hardwareMap.dcMotor.get("rightFront"));
-        motorMap.put("rightBack", hardwareMap.dcMotor.get("rightBack"));
+        motorMap.put("leftFront", hardwareMap.tryGet(DcMotor.class, "leftFront"));
+        motorMap.put("leftBack", hardwareMap.tryGet(DcMotor.class, "leftBack"));
+        motorMap.put("rightFront", hardwareMap.tryGet(DcMotor.class, "rightFront"));
+        motorMap.put("rightBack", hardwareMap.tryGet(DcMotor.class, "rightBack"));
 
         // For each motor, STOP, RESET, then RUN the ENCODER
         for (DcMotor motor : motorMap.values()) {
