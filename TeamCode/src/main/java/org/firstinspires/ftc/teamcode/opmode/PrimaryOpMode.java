@@ -1,9 +1,8 @@
 package org.firstinspires.ftc.teamcode.opmode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-
-import org.firstinspires.ftc.teamcode.archive.util.Instance;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,9 +13,9 @@ import java.util.Map;
  * This is the main {@link OpMode} for use with manual controls via gamepads, phones, or some other
  * device. The Autonomous task will be handled using {@link com.qualcomm.robotcore.eventloop.opmode.LinearOpMode}.
  */
-public final class PrimaryOpMode extends OpMode {
 
-    private static final Instance<PrimaryOpMode> INSTANCE = new Instance<>();
+@TeleOp(name = "Primary OpMode", group = "OpMode")
+public final class PrimaryOpMode extends OpMode {
 
     private final Map<String, DcMotor> motorMap;
 
@@ -29,17 +28,7 @@ public final class PrimaryOpMode extends OpMode {
     public PrimaryOpMode() {
         // Instance is now tied to this. If you were to create a new version of this class, an error
         // would be thrown as it would attempt to store an instance when it is already assigned.
-        INSTANCE.store(this);
         motorMap = new HashMap<>();
-    }
-
-    /**
-     * Accesses the static referral to the Object
-     *
-     * @return the static instance
-     */
-    public static PrimaryOpMode getInstance() {
-        return INSTANCE.get();
     }
 
     /**
