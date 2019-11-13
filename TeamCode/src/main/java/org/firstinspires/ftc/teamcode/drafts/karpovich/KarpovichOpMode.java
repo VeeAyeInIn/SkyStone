@@ -6,11 +6,11 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import java.util.HashMap;
 import java.util.Map;
-@TeleOp(name = "DLKTeleOp", group = "TeleOp")
+
+@TeleOp(name = "KarpovichOpMode", group = "TeleOp")
 public class KarpovichOpMode extends OpMode {
 
-
-    private final Map<String, DcMotor> motorMap;
+    private Map<String, DcMotor> motorMap;
 
     private double x; // X position of the joystick
     private double y; // Y position of the joystick
@@ -104,7 +104,7 @@ public class KarpovichOpMode extends OpMode {
         }
 
         if (gamepad2.left_trigger > 0.2) {
-            moveArm(-1)
+            moveArm(-1);
         } else if (gamepad2.right_trigger > 0.2) {
             moveArm(1);
         }

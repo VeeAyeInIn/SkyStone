@@ -13,10 +13,10 @@ import java.util.Map;
 @TeleOp(name = "ConnorIsABully", group = "Autonomous")
 public class KarpovichAutoOpMode extends QuadMecanumAutonomous {
 
-    private final DcMotor rightFront;
-    private final DcMotor leftFront;
-    private final DcMotor rightBack;
-    private final DcMotor leftBack;
+    private DcMotor rightFront;
+    private DcMotor leftFront;
+    private DcMotor rightBack;
+    private DcMotor leftBack;
     public double power;
     public double rpower;
     public double rFE;
@@ -86,11 +86,11 @@ public class KarpovichAutoOpMode extends QuadMecanumAutonomous {
         stop();
     }
     //Strafe Right (WIP)
-    public void righty(int power){
+    public void righty(double power){
         strafe(power);
     }
     //Strafe Left (WIP)
-    public void lefty(int power){
+    public void lefty(double power){
         strafe(-power);
     }
 
