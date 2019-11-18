@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.drafts;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -76,8 +75,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
  * etc.
  */
 
-@TeleOp(name = "NAME_HERE", group = "Iterative Opmode") // Identification
-@Disabled // This means it is not a valid OpMode, and it will not be used
+@TeleOp(name = "Example OpMode", group = "OpMode") // Identification
+// @Disabled // This means it is not a valid OpMode, and it will not be used
 public class ExampleOpMode extends OpMode {
 
     // Keep track of how much time has elapsed
