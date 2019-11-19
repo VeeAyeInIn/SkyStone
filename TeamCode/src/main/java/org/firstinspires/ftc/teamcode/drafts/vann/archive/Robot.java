@@ -1,6 +1,7 @@
-package org.firstinspires.ftc.teamcode.drafts.vann;
+package org.firstinspires.ftc.teamcode.drafts.vann.archive;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -9,14 +10,15 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 /**
  * @author Nerds of the North
  */
+@TeleOp(name = "DO NOT USE", group = "DO NOT USE")
 public abstract class Robot extends OpMode {
 
     private final ElapsedTime elapsed;
 
     private final DcMotor rightFront;
     private final DcMotor leftFront;
-    private final DcMotor rightBack;
-    private final DcMotor leftBack;
+    private final DcMotor rightRear;
+    private final DcMotor leftRear;
 
     /**
      * Default constructor for a Robot
@@ -30,8 +32,8 @@ public abstract class Robot extends OpMode {
         elapsed = new ElapsedTime();
         rightFront = hardwareMap.get(DcMotor.class, "rightFront");
         leftFront = hardwareMap.get(DcMotor.class, "leftFront");
-        rightBack = hardwareMap.get(DcMotor.class, "rightBack");
-        leftBack = hardwareMap.get(DcMotor.class, "leftBack");
+        rightRear = hardwareMap.get(DcMotor.class, "rightRear");
+        leftRear = hardwareMap.get(DcMotor.class, "leftRear");
     }
 
     /*
@@ -70,8 +72,8 @@ public abstract class Robot extends OpMode {
      *
      * @return the back right motor
      */
-    public DcMotor getRightBack() {
-        return rightBack;
+    public DcMotor getRightRear() {
+        return rightRear;
     }
 
     /**
@@ -79,8 +81,8 @@ public abstract class Robot extends OpMode {
      *
      * @return the back left motor
      */
-    public DcMotor getLeftBack() {
-        return leftBack;
+    public DcMotor getLeftRear() {
+        return leftRear;
     }
 
     /*
@@ -107,8 +109,8 @@ public abstract class Robot extends OpMode {
     protected void setPowers(double frontRightPower, double frontLeftPower, double backRightPower, double backLeftPower) {
         rightFront.setPower(frontRightPower);
         leftFront.setPower(frontLeftPower);
-        rightBack.setPower(backRightPower);
-        leftBack.setPower(backLeftPower);
+        rightRear.setPower(backRightPower);
+        leftRear.setPower(backLeftPower);
     }
 
     /**
@@ -119,8 +121,8 @@ public abstract class Robot extends OpMode {
     protected void setModes(DcMotor.RunMode mode) {
         rightFront.setMode(mode);
         leftFront.setMode(mode);
-        rightBack.setMode(mode);
-        leftBack.setMode(mode);
+        rightRear.setMode(mode);
+        leftRear.setMode(mode);
     }
 
     /**

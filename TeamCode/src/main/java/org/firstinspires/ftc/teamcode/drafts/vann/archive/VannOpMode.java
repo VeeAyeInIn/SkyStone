@@ -1,10 +1,12 @@
-package org.firstinspires.ftc.teamcode.drafts.vann;
+package org.firstinspires.ftc.teamcode.drafts.vann.archive;
 
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 /**
  * @author Connor Vann
  */
+@TeleOp(name = "Vann OpMode", group = "OpMode")
 public class VannOpMode extends Robot {
 
     @Override

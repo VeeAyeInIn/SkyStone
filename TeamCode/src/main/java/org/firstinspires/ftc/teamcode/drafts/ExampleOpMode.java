@@ -83,10 +83,10 @@ public class ExampleOpMode extends OpMode {
     private ElapsedTime elapsed;
 
     // Our functional motors
-    private DcMotor frontRight;
-    private DcMotor frontLeft;
-    private DcMotor backRight;
-    private DcMotor backLeft;
+    private DcMotor rightFront;
+    private DcMotor leftFront;
+    private DcMotor rightRear;
+    private DcMotor leftRear;
 
     @Override
     public void init() {
@@ -95,16 +95,16 @@ public class ExampleOpMode extends OpMode {
         elapsed = new ElapsedTime();
 
         // Assigning all the motors from the hardware map
-        frontRight = hardwareMap.get(DcMotor.class, "frontRight");
-        frontLeft = hardwareMap.get(DcMotor.class, "frontLeft");
-        backRight = hardwareMap.get(DcMotor.class, "backRight");
-        backLeft = hardwareMap.get(DcMotor.class, "backLeft");
+        rightFront = hardwareMap.get(DcMotor.class, "rightFront");
+        leftFront = hardwareMap.get(DcMotor.class, "leftFront");
+        rightRear = hardwareMap.get(DcMotor.class, "rightRear");
+        leftRear = hardwareMap.get(DcMotor.class, "leftRear");
 
         // Stop all the encoders and motors as a precaution
-        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         // Update with the new data
         telemetry.addData("Status", "Initialized");
@@ -123,10 +123,10 @@ public class ExampleOpMode extends OpMode {
         elapsed.reset();
 
         // Start all the encoders and motors
-        frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Update with the new data
         telemetry.addData("Status", "Started");
@@ -162,10 +162,10 @@ public class ExampleOpMode extends OpMode {
     public void stop() {
 
         // Stop all the encoders and motors
-        frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        backLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         // Update with the new data
         telemetry.addData("Status", "Stopped");
@@ -223,10 +223,10 @@ public class ExampleOpMode extends OpMode {
      * @param power the new uniform power
      */
     public void setPowers(double power) {
-        frontRight.setPower(power);
-        frontLeft.setPower(power);
-        backRight.setPower(power);
-        backLeft.setPower(power);
+        rightFront.setPower(power);
+        leftFront.setPower(power);
+        rightRear.setPower(power);
+        leftRear.setPower(power);
     }
 
     /**
@@ -238,10 +238,10 @@ public class ExampleOpMode extends OpMode {
      * @param backLeftPower   the new back left power
      */
     public void setPowers(double frontRightPower, double frontLeftPower, double backRightPower, double backLeftPower) {
-        frontRight.setPower(frontRightPower);
-        frontLeft.setPower(frontLeftPower);
-        backRight.setPower(backRightPower);
-        backLeft.setPower(backLeftPower);
+        rightFront.setPower(frontRightPower);
+        leftFront.setPower(frontLeftPower);
+        rightRear.setPower(backRightPower);
+        leftRear.setPower(backLeftPower);
     }
 
     /*
