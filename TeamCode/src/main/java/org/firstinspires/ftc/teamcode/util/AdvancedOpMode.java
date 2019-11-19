@@ -289,6 +289,19 @@ public abstract class AdvancedOpMode extends OpMode {
     }
 
     /**
+     * Getter for the elapsed time.
+     *
+     * @return elapsed time
+     */
+    public ElapsedTime getElapsedTime() {
+        return elapsedTime;
+    }
+
+//================================================================================================//
+//               Nested classes, enumerators, interfaces, and anything of that type               //
+//================================================================================================//
+
+    /**
      * For determining what type of data will be recorded. Names are relatively self-explanatory,
      * such as INFO for information, DEBUG for debugging data, etc.
      * <p>
