@@ -21,6 +21,8 @@ public final class PrimaryOpMode extends OpMode {
 
     private double x; // X position of the joystick
     private double y; // Y position of the joystick
+    private double rotation; // Rotational value
+    private int speedMultiplier; //Speed Multiplier
 
     /**
      * Default constructor to initiate storage of its instance.
@@ -80,8 +82,36 @@ public final class PrimaryOpMode extends OpMode {
         x = gamepad1.left_stick_x; // Updated X Position
         y = gamepad1.left_stick_y; // Updated Y Position
 
+        if (gamepad1.right_trigger>0.3) rotation = 1 * gamepad1.right_trigger;       // Set r positive with a buffer zone
+        else if (gamepad1.left_trigger>0.3) rotation = -1 * gamepad1.left_trigger; // Set r negative with a buffer zone
+
         if (Math.abs(x) < 0.1) x = 0; // Dead-Zone of 0.1
         if (Math.abs(y) < 0.1) y = 0; // Dead-Zone of 0.1
+
+        if (1 <= speedMultiplier && speedMultiplier <= 2) {
+            if (gamepad1.dpad_up){
+                speedMultiplier = 2;
+            }
+            if (gamepad1.dpad_down){
+                speedMultiplier = 1;
+            }
+        }
+
+        if (rotation != 0) {
+            try {
+                //rotate the robot
+                motorMap.get("rightFront").setPower(-rotation * speedMultiplier);
+                motorMap.get("rightBack").setPower(-rotation * speedMultiplier);
+                motorMap.get("leftFront").setPower(-rotation * speedMultiplier);
+                motorMap.get("leftBack").setPower(-rotation * speedMultiplier);
+            } catch (NullPointerException ignored) { /* Actions if NPE */ }
+        } else {
+            //Move the robot
+            motorMap.get ("rightFront").setPower(-y * speedMultiplier - x * speedMultiplier);
+            motorMap.get ("rightBack").setPower(-y * speedMultiplier + x * speedMultiplier);
+            motorMap.get ("leftFront").setPower(y * speedMultiplier - x * speedMultiplier);
+            motorMap.get ("leftBack").setPower(y * speedMultiplier + x * speedMultiplier);
+        }
     }
 
     /**

@@ -1,0 +1,160 @@
+package org.firstinspires.ftc.teamcode.drafts.karpovich;
+
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
+
+import org.firstinspires.ftc.teamcode.util.QuadMecanumAutonomous;
+
+import java.util.HashMap;
+import java.util.Map;
+@TeleOp(name = "ConnorIsABully", group = "Autonomous")
+public class KarpovichAutoOpMode extends QuadMecanumAutonomous {
+
+    private DcMotor rightFront;
+    private DcMotor leftFront;
+    private DcMotor rightRear;
+    private DcMotor leftRear;
+
+    public double power;
+    public double rpower;
+
+    public double rFE;
+    public double lFE;
+    public double rBE;
+    public double lBE;
+    
+    //Run this method on startup
+    public void Main(){
+        power = 0;
+        //Move forward slightly before scanning for the skystone
+        while(/*Encoder value is below set value*/) {
+            forward(power);
+        }
+        stop();
+
+        //wait for a tiny bit
+
+        //Strafe while scanning for the skystone
+        while(/*skystone is not detected*/){
+            righty(power);
+        }
+        stop();
+
+        //Move forward to the skystone
+        while(/*Encoder value is below set value*/) {
+            forward(power);
+        }
+        stop();
+
+        //grab block
+
+        //Move forward with the block before turning to go across the middle
+        while(/*Encoder value is below set value*/) {
+            forward(power);
+        }
+        stop();
+
+        //Rotate 90 degrees to go towards the center
+        while(/*Encoder value is below set value*/) {
+            rotate(rpower);
+        }
+        stop();
+
+        //Go towards the middle
+        while(/*Encoder value is below set value*/) {
+            forward(power);
+        }
+        stop();
+
+        //Rotate 90 degrees to go towards our gate
+        while(/*Encoder value is below set value*/) {
+            rotate(rpower);
+        }
+        stop();
+
+        //Go towards the the area infront of our gate
+        while(/*Encoder value is below set value*/) {
+            forward(power);
+        }
+        stop();
+
+        //Rotate 90 degrees towards our gate
+        while(/*Encoder value is below set value*/) {
+            rotate(rpower);
+        }
+        stop();
+    }
+    //Strafe Right (WIP)
+    public void righty(double power){
+        strafe(power);
+    }
+    //Strafe Left (WIP)
+    public void lefty(double power){
+        strafe(-power);
+    }
+
+    @Override
+    public void runOpMode() throws InterruptedException {
+
+    }
+
+    @Override
+    public void backward(double power, DcMotor... motors) {
+
+    }
+
+    @Override
+    public void left(double power, DcMotor... motors) {
+
+    }
+
+    @Override
+    public void right(double power, DcMotor... motors) {
+
+    }
+
+    @Override
+    public void rotate(double power, DcMotor... motors) {
+
+    }
+    /*
+    //Move forward
+    public void forward(int power){
+        rightFront.setpower(power);
+        leftFront.setpower(-power);
+        rightBack.setpower(power);
+        leftBack.setpower(-power);
+    }
+    //Strafe right (not finalized on motor direction)
+    protected void right(int power){
+        rightFront.setpower(-power);
+        leftFront.setpower(power);
+        rightBack.setpower(power);
+        leftBack.setpower(-power);
+    }
+    //Stop all wheels
+    protected void stop(){
+        rightFront.setpower(0);
+        leftFront.setpower(0);
+        rightBack.setpower(0);
+        leftBack.setpower(0);
+    }
+    //rotate the robot
+    protected void rotate(int power){
+        rightFront.setpower(power);
+        leftFront.setpower(power);
+        rightBack.setpower(power);
+        leftBack.setpower(power);
+    }
+    //Sets all of the motors at once to individual values
+    protected void setpowers(double rf, double rb, double lf, double lb){
+        rightFront.setpower(rf);
+        leftFront.setpower(lf);
+        rightBack.setpower(rb);
+        leftBack.setpower(lb);
+    }
+     */
+}
