@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.util;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -19,7 +18,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 @TeleOp(name = "The name of your OpMode", group = "The group that the OpMode is in")
 
 // Prevents the TeleOp from being seen
-@Disabled
+// @Disabled
 
 public abstract class AdvancedOpMode extends OpMode {
 
