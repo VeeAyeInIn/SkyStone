@@ -15,10 +15,12 @@ public class KarpovichAutoOpMode extends QuadMecanumAutonomous {
 
     private DcMotor rightFront;
     private DcMotor leftFront;
-    private DcMotor rightBack;
-    private DcMotor leftBack;
+    private DcMotor rightRear;
+    private DcMotor leftRear;
+
     public double power;
     public double rpower;
+
     public double rFE;
     public double lFE;
     public double rBE;

@@ -10,13 +10,26 @@ import java.util.Map;
 @TeleOp(name = "KarpovichOpMode", group = "TeleOp")
 public class KarpovichOpMode extends OpMode {
 
-    private Map<String, DcMotor> motorMap;
-
+    //Initialize variables
     private double x; // X position of the joystick
     private double y; // Y position of the joystick
     private double rotation; // Rotational value
     private double speedMultiplier; //Speed Multiplier
+    private double armPower = 1.0; //Arm power
+    private double aEMax = 10.0;
+    private double aE;
+    private double intakePower = 1.0;
 
+    //Initialize wheels
+    private DcMotor rightRear;
+    private DcMotor leftRear;
+    private DcMotor leftFront;
+    private DcMotor rightFront;
+
+    //Initialize other motors
+    private DcMotor rightGear;
+    private DcMotor leftGear;
+    private DcMotor arm;
 
 
 
@@ -37,19 +50,27 @@ public class KarpovichOpMode extends OpMode {
      */
     @Override
     public void init() {
-        newStatus("Initialized");
+        // Assigning all the motors from the hardware map
+        rightFront = hardwareMap.get(DcMotor.class, "rightFront");
+        leftFront = hardwareMap.get(DcMotor.class, "leftFront");
+        rightRear = hardwareMap.get(DcMotor.class, "rightRear");
+        leftRear = hardwareMap.get(DcMotor.class, "leftRear");
+        rightGear = hardwareMap.get(DcMotor.class, "rightGear");
+        leftGear = hardwareMap.get(DcMotor.class, "leftGear");
+        arm = hardwareMap.get(DcMotor.class, "arm");
 
-        // Setup the motors by their name
-        motorMap.put("leftFront", hardwareMap.dcMotor.get("leftFront"));
-        motorMap.put("leftBack", hardwareMap.dcMotor.get("leftBack"));
-        motorMap.put("rightFront", hardwareMap.dcMotor.get("rightFront"));
-        motorMap.put("rightBack", hardwareMap.dcMotor.get("rightBack"));
+        // Stop all the encoders and motors as a precaution
+        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftGear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightGear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        // For each motor, STOP, RESET, then RUN the ENCODER
-        for (DcMotor motor : motorMap.values()) {
-            motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            motor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        }
+        // Update with the new data
+        telemetry.addData("Status", "Initialized");
+        telemetry.update();
     }
 
     /**
@@ -60,14 +81,12 @@ public class KarpovichOpMode extends OpMode {
     @Override
     public void loop() {
 
-        // For each motor, update the displayed position
-        for (DcMotor motor : motorMap.values()) {
-            telemetry.addData(motor.getDeviceName() + " position", motor.getCurrentPosition());
-        }
-
         //Set x and y to the joystick x and y -1.0 to 1.0
         x = gamepad1.left_stick_x; // Updated X Position
         y = gamepad1.left_stick_y; // Updated Y Position
+
+        //Update Encoder Values
+        aE = arm.getCurrentPosition();
 
         //Update Rotation Variable
         if (gamepad1.right_trigger > 0.3)
@@ -90,17 +109,17 @@ public class KarpovichOpMode extends OpMode {
         if (rotation != 0) {
             try {
                 //rotate the robot
-                motorMap.get("rightFront").setPower(-rotation * speedMultiplier);
-                motorMap.get("rightBack").setPower(-rotation * speedMultiplier);
-                motorMap.get("leftFront").setPower(-rotation * speedMultiplier);
-                motorMap.get("leftBack").setPower(-rotation * speedMultiplier);
+                rightFront.setPower(-rotation * speedMultiplier);
+                rightRear.setPower(-rotation * speedMultiplier);
+                leftFront.setPower(-rotation * speedMultiplier);
+                leftRear.setPower(-rotation * speedMultiplier);
             } catch (NullPointerException ignored) { /* Actions if NPE */ }
         } else {
             //Move the robot
-            motorMap.get("rightFront").setPower(-y * speedMultiplier - x * speedMultiplier);
-            motorMap.get("rightBack").setPower(-y * speedMultiplier + x * speedMultiplier);
-            motorMap.get("leftFront").setPower(y * speedMultiplier - x * speedMultiplier);
-            motorMap.get("leftBack").setPower(y * speedMultiplier + x * speedMultiplier);
+            rightFront.setPower(-y * speedMultiplier - x * speedMultiplier);
+            rightRear.setPower(-y * speedMultiplier + x * speedMultiplier);
+            leftFront.setPower(y * speedMultiplier - x * speedMultiplier);
+            leftRear.setPower(y * speedMultiplier + x * speedMultiplier);
         }
 
         if (gamepad2.left_trigger > 0.2) {
@@ -110,11 +129,11 @@ public class KarpovichOpMode extends OpMode {
         }
 
         if (gamepad2.dpad_down) {
-            grabBlock(-1);
+            intakeBlock(-1);
         }
 
         if (gamepad2.dpad_up) {
-            grabBlock(1);
+            intakeBlock(1);
         }
 
         if (gamepad2.left_bumper) {
@@ -155,15 +174,18 @@ public class KarpovichOpMode extends OpMode {
     }
 
     public void moveArm(int i) {
-        //Move Arm
+        if(aE <= aEMax) {
+            arm.setPower(armPower * i);
+        }
     }
 
     public void rotateArm(int direction){
         //Rotate Arm
     }
 
-    public void grabBlock(int r){
-        //Grab/Release Block
+    public void intakeBlock(int direction){
+        rightGear.setPower(intakePower * direction);
+        leftGear.setPower(intakePower * direction);
     }
 }
 
