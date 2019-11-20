@@ -1,22 +1,22 @@
-package org.firstinspires.ftc.teamcode.drafts.vann;
+package org.firstinspires.ftc.teamcode.opmode;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.teamcode.util.AdvancedOpMode;
+import org.firstinspires.ftc.teamcode.util.BasicOpMode;
 
-@TeleOp(name = "SkyStone Iterative OpMode", group = "OpMode")
-public class SkyStoneOpMode extends AdvancedOpMode {
+@TeleOp(name = "FRICK", group = "FRICK")
+public class FrickOpMode extends BasicOpMode {
 
-    public SkyStoneOpMode() {
-        super( /* Call the super-class constructor */);
+    public FrickOpMode() {
+        super();
     }
 
     @Override
     public void init() {
 
         // Start running the encoders
-        setUniversalMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        setWheelMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         info("Robot has initialized");
     }
@@ -55,23 +55,13 @@ public class SkyStoneOpMode extends AdvancedOpMode {
                 setWheelPower(x, -x, -x, x);
             }
         }
-
-        // Now we need to deal with the second controller
-        if (gamepad2.right_trigger > 0.1 || gamepad2.left_trigger > 0.1) {
-            setArmPower(gamepad2.right_trigger > gamepad2.left_trigger
-                    ? gamepad2.right_trigger : -gamepad2.left_trigger);
-        }
-
-        // Handle the gears if not in the dead-zone
-        setGearPower(Math.abs(gamepad2.left_stick_y) > 0.1 ? gamepad2.left_stick_y : 0,
-                Math.abs(gamepad2.right_stick_y) > 0.1 ? gamepad2.right_stick_y : 0);
     }
 
     @Override
     public void stop() {
 
         // Stop the encoders
-        setUniversalMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        setWheelMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         info("Robot has stopped");
     }
