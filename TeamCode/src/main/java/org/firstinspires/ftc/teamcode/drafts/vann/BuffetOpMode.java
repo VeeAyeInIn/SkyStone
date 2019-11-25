@@ -53,13 +53,13 @@ public class BuffetOpMode extends OpMode {
         if (gamepad1.a) {
             // Fast Speed
             speed = 1.0;
-        } else if (gamepad1.b) {
+        } else if (gamepad1.x) {
             // Normal Speed
             speed = 1.5;
         } else if (gamepad1.y) {
             // Slow Speed
             speed = 2.0;
-        } else if (gamepad1.x) {
+        } else if (gamepad1.b) {
             // Super Slow Speed
             speed = 3.0;
         }
