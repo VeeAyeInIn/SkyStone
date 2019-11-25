@@ -15,6 +15,9 @@ public class BuffetOpMode extends OpMode {
     private DcMotor leftGear;
     private DcMotor rightGear;
 
+    private boolean independentGears = true;
+    private double speed = 1.0;
+
     @Override
     public void init() {
 
@@ -28,7 +31,6 @@ public class BuffetOpMode extends OpMode {
 
         // Start running the encoders
         setUniversalMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
         // info("Robot has initialized");
     }
 
@@ -42,30 +44,73 @@ public class BuffetOpMode extends OpMode {
 
         // Start the time back at zero
         // getElapsedTime().reset();
-
         // info("Robot has started");
     }
 
     @Override
     public void loop() {
 
+        if (gamepad1.a) {
+            // Fast Speed
+            speed = 1.0;
+        } else if (gamepad1.b) {
+            // Normal Speed
+            speed = 1.5;
+        } else if (gamepad1.y) {
+            // Slow Speed
+            speed = 2.0;
+        } else if (gamepad1.x) {
+            // Super Slow Speed
+            speed = 3.0;
+        }
+
+        // Power in the x-direction
         double x = Math.abs(gamepad1.left_stick_x) > 0.2 ? gamepad1.left_stick_x : 0;
+
+        // Power in the y-direction
         double y = Math.abs(gamepad1.left_stick_y) > 0.2 ? gamepad1.left_stick_y : 0;
+
+        // Rotational power
         double rotate = gamepad1.right_trigger > gamepad1.left_trigger
                 ? gamepad1.right_trigger : -gamepad1.left_trigger;
 
-        setWheelPower(y - x - rotate, -y - x - rotate,
-                y + x - rotate, -y + x - rotate);
+        // Set each wheel power
+        setWheelPower((y - x - rotate) / speed,
+                (-y - x - rotate) / speed,
+                (y + x - rotate) / speed,
+                (-y + x - rotate) / speed);
+
+        if (gamepad2.left_bumper) {
+            // No independent gears
+            independentGears = false;
+        } else if (gamepad2.right_bumper) {
+            // Independent gears
+            independentGears = true;
+        }
 
         // Now we need to deal with the second controller
         if (gamepad2.right_trigger > 0.1 || gamepad2.left_trigger > 0.1) {
             setArmPower(gamepad2.right_trigger > gamepad2.left_trigger
-                    ? gamepad2.right_trigger / 5.0 : -gamepad2.left_trigger / 5.0);
+                    ? gamepad2.right_trigger / 2.0 : -gamepad2.left_trigger / 2.0);
         }
 
-        // Handle the gears if not in the dead-zone
-        setGearPower(Math.abs(gamepad2.left_stick_y) > 0.1 ? gamepad2.left_stick_y : 0,
-                Math.abs(gamepad2.right_stick_y) > 0.1 ? gamepad2.right_stick_y : 0);
+        // Are we doing independent or synchronized gears
+        if (independentGears) {
+
+            // Handle the gears if not in the dead-zone
+            setGearPower(Math.abs(gamepad2.left_stick_y) > 0.1 ? gamepad2.left_stick_y : 0,
+                    Math.abs(gamepad2.right_stick_y) > 0.1 ? gamepad2.right_stick_y : 0);
+        } else {
+
+            // Handle the gears if not in the dead-zone
+            setGearPower(Math.abs(gamepad2.left_stick_y) > Math.abs(gamepad2.right_stick_y)
+                    ? Math.abs(gamepad2.left_stick_y) > 0.1
+                    ? gamepad2.left_stick_y
+                    : 0
+                    : Math.abs(gamepad2.right_stick_y) > 0.1
+                    ? gamepad2.right_stick_y
+                    : 0);
+        }
     }
 
     @Override
@@ -73,7 +118,6 @@ public class BuffetOpMode extends OpMode {
 
         // Stop the encoders
         setUniversalMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
         // info("Robot has stopped");
     }
 
