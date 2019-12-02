@@ -90,13 +90,13 @@ public class BuffetOpMode extends OpMode {
         leftGear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightGear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        // This needs to be running at start
-        tray.setPower(1);
     }
 
     @Override
     public void loop() {
+
+        // Always make sure it is running
+        tray.setPower(1);
 
         // Toggle speed
         if (gamepad1.a) {
@@ -128,15 +128,21 @@ public class BuffetOpMode extends OpMode {
         double max; // Hold a slot if we need to find the max value
         if (synchronizedGears) { // Synchronized or independent movements
             if ((max = Math.max(gamepad2.left_trigger, gamepad2.right_trigger)) > DEAD_ZONE) {
-                leftGear.setPower(max);
-                rightGear.setPower(max);
+                // Expel the block
+                if (gamepad2.left_trigger > gamepad2.right_trigger) {
+                    leftGear.setPower(-max);
+                    rightGear.setPower(max);
+                } else /* else take in the block */ {
+                    leftGear.setPower(max);
+                    rightGear.setPower(-max);
+                }
             } else {
                 leftGear.setPower(0);
                 rightGear.setPower(0);
             }
         } else {
-            leftGear.setPower(clip(gamepad2.left_stick_y));
-            rightGear.setPower(-clip(gamepad2.right_stick_y));
+            leftGear.setPower(clip(gamepad2.left_trigger));
+            rightGear.setPower(-clip(gamepad2.right_trigger));
         }
 
         // Arm
