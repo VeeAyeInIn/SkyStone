@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.drafts.vann;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -23,6 +24,8 @@ import com.qualcomm.robotcore.hardware.Servo;
  * <p>
  * Physical attributes will be dealt with using {@link #hardwareMap}.
  */
+
+@TeleOp(name = "Buffet OpMode", group = "Iterative OpMode")
 public class BuffetOpMode extends OpMode {
 
     // Constants
@@ -108,8 +111,10 @@ public class BuffetOpMode extends OpMode {
 
         // Toggle gear synchronization
         if (gamepad2.left_bumper) {
+            // Enable synchronization on left bumper
             synchronizedGears = true;
         } else if (gamepad2.right_bumper) {
+            // Disable synchronization on right bumper
             synchronizedGears = false;
         }
 
@@ -135,7 +140,7 @@ public class BuffetOpMode extends OpMode {
         }
 
         // Arm
-        arm.setPower(clip(gamepad2.left_stick_y));
+        arm.setPower(-clip(gamepad2.left_stick_y));
 
         // Wrist
         wrist.setPower(clip(gamepad2.right_stick_x));
