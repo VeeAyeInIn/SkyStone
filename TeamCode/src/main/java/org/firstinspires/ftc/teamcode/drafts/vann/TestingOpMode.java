@@ -9,12 +9,11 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import java.util.Locale;
 
-@TeleOp(name = "Rewrite", group = "Iterative OpMode")
-public class RewriteOpMode extends OpMode {
+@TeleOp(name = "Testing", group = "Iterative OpMode")
+public class TestingOpMode extends OpMode {
 
     // Constants
     private static final double DEAD_ZONE = 0.1;
-    private static final double STATIONARY_WRIST = 0.09;
 
     // Dynamic Values
     private double speed;
@@ -29,7 +28,7 @@ public class RewriteOpMode extends OpMode {
     private DcMotor arm;
 
     // Continuous Rotation Servos
-    private CRServo wrist;
+    private Servo wrist;
     private CRServo latch;
 
     // Servos
@@ -48,7 +47,7 @@ public class RewriteOpMode extends OpMode {
         arm = hardwareMap.dcMotor.get("arm");
 
         // Assign all CRServos
-        wrist = hardwareMap.crservo.get("wrist");
+        wrist = hardwareMap.servo.get("wrist");
         latch = hardwareMap.crservo.get("latch");
 
         // Assign all Servos
@@ -56,6 +55,15 @@ public class RewriteOpMode extends OpMode {
 
         // Assign other values
         speed = 0.75; // Normal
+
+        // Reset all the motors as a precaution
+        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftGear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightGear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
     @Override
@@ -66,10 +74,6 @@ public class RewriteOpMode extends OpMode {
     @Override
     public void start() {
 
-        // Setup the arm
-        arm.setTargetPosition(0);
-        arm.setDirection(DcMotorSimple.Direction.FORWARD);
-
         // Start up all the motors
         leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -77,9 +81,9 @@ public class RewriteOpMode extends OpMode {
         rightRear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leftGear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightGear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        wrist.setDirection(DcMotorSimple.Direction.FORWARD);
+        wrist.setDirection(Servo.Direction.FORWARD);
         latch.setDirection(DcMotorSimple.Direction.FORWARD);
         tray.setDirection(Servo.Direction.FORWARD);
     }
@@ -132,36 +136,30 @@ public class RewriteOpMode extends OpMode {
             rightGear.setPower(0);
         }
 
-        arm.setPower(1);
         // Handle Arm
-        if (gamepad2.left_stick_y > 0.1) {
-            arm.setTargetPosition(arm.getCurrentPosition() + 10);
-        } else if (gamepad2.left_stick_y < -0.1) {
-            arm.setTargetPosition(arm.getCurrentPosition() - 10);
+        if (!(-0.1 < gamepad2.left_stick_y && gamepad2.left_stick_y < 0.1)) {
+            arm.setPower(gamepad2.left_stick_y / 3);
         } else {
-            arm.setTargetPosition(arm.getCurrentPosition());
+            arm.setPower(0);
         }
 
         // Handle Wrist
-        if (gamepad2.right_stick_x > 0.1) {
-            wrist.setPower(0);
-        } else if (gamepad2.right_stick_x < -0.1) {
-            wrist.setPower(STATIONARY_WRIST * 1.1);
-        } else {
-            wrist.setPower(STATIONARY_WRIST * (1 / 1.1));
-        }
+        if (!(-0.1 < gamepad2.right_stick_x && gamepad2.right_stick_x < 0.1)) {
+            wrist.setPosition((gamepad2.right_stick_x + 1) / 2);
+        }// else {
+        //    wrist.setPosition(0.5);
+        //}
 
         // Handle Latch
         if (!(-0.1 < gamepad2.right_stick_y && gamepad2.right_stick_y < 0.1)) {
-            latch.setPower(gamepad2.right_stick_y / 5);
+            latch.setPower((gamepad2.right_stick_y + 1) / 2);
         } else {
-            latch.setPower(0);
+            latch.setPower(0.5);
         }
 
-        debug("Latch", format("Port:     %d   Power:    %.2f", latch.getPortNumber(), latch.getPower()));
-        debug("Tray", format("Port:     %d   Position: %.2f", tray.getPortNumber(), tray.getPosition()));
-        debug("Wrist", format("Port:     %d   Power:    %.2f", wrist.getPortNumber(), wrist.getPower()));
-        debug("Arm", format("Position: %d   Power:    %.2f   Target %d", arm.getCurrentPosition(), arm.getPower(), arm.getTargetPosition()));
+        debug("Wrist", format("Port: %d   Power:    %.2f", wrist.getPortNumber(), wrist.getPosition()));
+        debug("Latch", format("Port: %d   Power:    %.2f", latch.getPortNumber(), latch.getPower()));
+        debug("Tray", format("Port: %d   Position: %.2f", tray.getPortNumber(), tray.getPosition()));
 
         telemetry.update();
     }
