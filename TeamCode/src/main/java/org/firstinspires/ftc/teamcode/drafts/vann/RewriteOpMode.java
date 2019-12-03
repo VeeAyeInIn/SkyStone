@@ -151,19 +151,20 @@ public class RewriteOpMode extends OpMode {
         if (!(-0.1 < gamepad2.right_stick_x && gamepad2.right_stick_x < 0.1)) {
             wrist.setPower((gamepad2.right_stick_x + 1) / 2);
         } else {
-            wrist.setPower(0);
+            wrist.setPower(0.5);
         }
 
         // Handle Latch
         if (!(-0.1 < gamepad2.right_stick_y && gamepad2.right_stick_y < 0.1)) {
             latch.setPower((gamepad2.right_stick_y + 1) / 2);
         } else {
-            latch.setPower(0);
+            latch.setPower(0.5);
         }
 
-        debug("Wrist", String.format(Locale.ENGLISH, "Port: %d\nPower: %.2f\nDirection: %s", wrist.getPortNumber(), wrist.getPower(), wrist.getDirection().name()));
-        debug("Latch", String.format(Locale.ENGLISH, "Port: %d\nPower: %.2f\nDirection: %s", latch.getPortNumber(), latch.getPower(), latch.getDirection().name()));
-        debug("Tray", String.format(Locale.ENGLISH, "Port: %d\nPosition: %.2f\nDirection: %s", tray.getPortNumber(), tray.getPosition(), tray.getDirection().name()));
+        debug("Wrist", format("Port: %d   Power:    %.2f", wrist.getPortNumber(), wrist.getPower()));
+        debug("Latch", format("Port: %d   Power:    %.2f", latch.getPortNumber(), latch.getPower()));
+        debug("Tray", format("Port: %d   Position: %.2f", tray.getPortNumber(), tray.getPosition()));
+
         telemetry.update();
     }
 
@@ -189,5 +190,9 @@ public class RewriteOpMode extends OpMode {
 
     private void debug(String name, String caption) {
         telemetry.addData(name, caption);
+    }
+
+    private String format(String string, Object... args) {
+        return String.format(Locale.ENGLISH, string, args);
     }
 }
