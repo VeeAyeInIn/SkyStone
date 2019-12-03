@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import java.util.Locale;
+
 @TeleOp(name = "Rewrite", group = "Iterative OpMode")
 public class RewriteOpMode extends OpMode {
 
@@ -27,10 +29,10 @@ public class RewriteOpMode extends OpMode {
 
     // Continuous Rotational Servos
     private CRServo wrist;
-    private CRServo tray;
+    private CRServo latch;
 
     // Servos
-    private Servo latch;
+    private Servo tray;
 
     @Override
     public void init() {
@@ -46,13 +48,22 @@ public class RewriteOpMode extends OpMode {
 
         // Assign all CRServos
         wrist = hardwareMap.crservo.get("wrist");
-        tray = hardwareMap.crservo.get("tray");
+        latch = hardwareMap.crservo.get("latch");
 
         // Assign all Servos
-        latch = hardwareMap.servo.get("latch");
+        tray = hardwareMap.servo.get("tray");
 
         // Assign other values
         speed = 0.75; // Normal
+
+        // Reset all the motors as a precaution
+        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftGear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightGear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
     @Override
@@ -72,9 +83,13 @@ public class RewriteOpMode extends OpMode {
         rightGear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
+        wrist.resetDeviceConfigurationForOpMode();
+        latch.resetDeviceConfigurationForOpMode();
+        tray.resetDeviceConfigurationForOpMode();
+
         wrist.setDirection(DcMotorSimple.Direction.FORWARD);
-        tray.setDirection(DcMotorSimple.Direction.FORWARD);
-        latch.setDirection(Servo.Direction.FORWARD);
+        latch.setDirection(DcMotorSimple.Direction.FORWARD);
+        tray.setDirection(Servo.Direction.FORWARD);
     }
 
     @Override
@@ -127,29 +142,42 @@ public class RewriteOpMode extends OpMode {
 
         // Handle Arm
         if (!(-0.1 < gamepad2.left_stick_y && gamepad2.left_stick_y < 0.1)) {
-            arm.setPower(gamepad2.left_stick_y / 2.5);
+            arm.setPower(gamepad2.left_stick_y / 3);
         } else {
             arm.setPower(0);
         }
 
         // Handle Wrist
         if (!(-0.1 < gamepad2.right_stick_x && gamepad2.right_stick_x < 0.1)) {
-            wrist.setPower(gamepad2.right_stick_x);
+            wrist.setPower((gamepad2.right_stick_x + 1) / 2);
         } else {
             wrist.setPower(0);
         }
 
         // Handle Latch
         if (!(-0.1 < gamepad2.right_stick_y && gamepad2.right_stick_y < 0.1)) {
-            latch.setPosition(latch.getPosition() + (gamepad2.right_stick_y / 50));
+            latch.setPower((gamepad2.right_stick_y + 1) / 2);
+        } else {
+            latch.setPower(0);
         }
 
-
+        debug("Wrist", String.format(Locale.ENGLISH, "Port: %d\nPower: %.2f\nDirection: %s", wrist.getPortNumber(), wrist.getPower(), wrist.getDirection().name()));
+        debug("Latch", String.format(Locale.ENGLISH, "Port: %d\nPower: %.2f\nDirection: %s", latch.getPortNumber(), latch.getPower(), latch.getDirection().name()));
+        debug("Tray", String.format(Locale.ENGLISH, "Port: %d\nPosition: %.2f\nDirection: %s", tray.getPortNumber(), tray.getPosition(), tray.getDirection().name()));
+        telemetry.update();
     }
 
     @Override
     public void stop() {
 
+        // Reset all the motors as a precaution
+        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftGear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightGear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
     private void setWheelPowers(double lf, double rf, double lr, double rr) {
@@ -160,6 +188,6 @@ public class RewriteOpMode extends OpMode {
     }
 
     private void debug(String name, String caption) {
-
+        telemetry.addData(name, caption);
     }
 }
