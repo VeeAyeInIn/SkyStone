@@ -25,7 +25,7 @@ import com.qualcomm.robotcore.hardware.Servo;
  * Physical attributes will be dealt with using {@link #hardwareMap}.
  */
 
-@TeleOp(name = "IDKATP", group = "Iterative OpMode")
+@TeleOp(name = "IDKATP", group = "TeleOp")
 public class IDKATP extends OpMode {
 
     // Constants
