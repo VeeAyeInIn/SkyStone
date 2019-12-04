@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.drafts.karpovich;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.CRServo;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,6 +32,7 @@ public class KarpovichOpMode extends OpMode {
     private DcMotor leftGear;
     private DcMotor arm;
 
+    private CRServo wrist;
 
 
     /**
@@ -58,6 +60,7 @@ public class KarpovichOpMode extends OpMode {
         rightGear = hardwareMap.get(DcMotor.class, "rightGear");
         leftGear = hardwareMap.get(DcMotor.class, "leftGear");
         arm = hardwareMap.get(DcMotor.class, "arm");
+        wrist = hardwareMap.get(CRServo.class, "wrist");
 
         // Stop all the encoders and motors as a precaution
         rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -126,20 +129,25 @@ public class KarpovichOpMode extends OpMode {
             moveArm(-1);
         } else if (gamepad2.right_trigger > 0.2) {
             moveArm(1);
+        }else {
+            arm.setPower(0)
         }
 
         if (gamepad2.dpad_down) {
             intakeBlock(-1);
-        }
-
-        if (gamepad2.dpad_up) {
+        } else if (gamepad2.dpad_up) {
             intakeBlock(1);
+        } else {
+            rightGear.setPower(0);
+            leftGear.setPower(0);
         }
 
         if (gamepad2.left_bumper) {
-            rotateArm(1);
+            rotateWrist(1);
         } else if (gamepad2.right_bumper) {
-            rotateArm(-1);
+            rotateWrist(-1);
+        } else {
+            rotateWrist(0);
         }
     }
 
@@ -179,8 +187,8 @@ public class KarpovichOpMode extends OpMode {
         }
     }
 
-    public void rotateArm(int direction){
-        //Rotate Arm
+    public void rotateWrist(int direction){
+        wrist.setPower(direction);
     }
 
     public void intakeBlock(int direction){
