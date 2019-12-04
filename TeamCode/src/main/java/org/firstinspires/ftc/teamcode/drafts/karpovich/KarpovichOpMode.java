@@ -130,7 +130,7 @@ public class KarpovichOpMode extends OpMode {
         } else if (gamepad2.right_trigger > 0.2) {
             moveArm(1);
         }else {
-            arm.setPower(0)
+            arm.setPower(0);
         }
 
         if (gamepad2.dpad_down) {
