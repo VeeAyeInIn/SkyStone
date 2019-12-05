@@ -35,6 +35,9 @@ public class RewriteOpMode extends OpMode {
     // Servos
     private Servo tray;
 
+    // Data
+    private int armPosition;
+
     @Override
     public void init() {
 
@@ -67,8 +70,9 @@ public class RewriteOpMode extends OpMode {
     public void start() {
 
         // Setup the arm
-        arm.setTargetPosition(0);
+        arm.setTargetPosition(armPosition = 0);
         arm.setDirection(DcMotorSimple.Direction.FORWARD);
+        arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         // Start up all the motors
         leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -132,23 +136,30 @@ public class RewriteOpMode extends OpMode {
             rightGear.setPower(0);
         }
 
-        arm.setPower(1);
         // Handle Arm
+        arm.setPower(1);
         if (gamepad2.left_stick_y > 0.1) {
-            arm.setTargetPosition(arm.getCurrentPosition() + 10);
+            arm.setPower(gamepad2.left_stick_y);
+            armPosition++;
         } else if (gamepad2.left_stick_y < -0.1) {
-            arm.setTargetPosition(arm.getCurrentPosition() - 10);
+            arm.setPower(gamepad2.left_stick_y);
+            armPosition--;
         } else {
-            arm.setTargetPosition(arm.getCurrentPosition());
+            arm.setPower(0);
         }
+
+        //if (armPosition > 255) armPosition = 255;
+        //if (armPosition < -30) armPosition = -30;
+
+        arm.setTargetPosition(armPosition);
 
         // Handle Wrist
         if (gamepad2.right_stick_x > 0.1) {
-            wrist.setPower(0);
+            wrist.setPower(-1);
         } else if (gamepad2.right_stick_x < -0.1) {
-            wrist.setPower(STATIONARY_WRIST * 1.1);
+            wrist.setPower(1);
         } else {
-            wrist.setPower(STATIONARY_WRIST * (1 / 1.1));
+            wrist.setPower(0);
         }
 
         // Handle Latch

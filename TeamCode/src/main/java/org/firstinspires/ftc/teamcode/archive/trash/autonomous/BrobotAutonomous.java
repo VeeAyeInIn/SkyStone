@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.drafts.vann.autonomous;
+package org.firstinspires.ftc.teamcode.archive.trash.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
