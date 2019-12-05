@@ -110,6 +110,16 @@ public class Autonomous extends LinearOpMode {
 
         // We need to keep track of time
         time = new ElapsedTime();
+
+        // Handle finding SkyStone
+        // Head to tray under bridge
+        // Deposit SkyStone
+        // Head back
+        // Find last SkyStone
+        // Head to tray under bridge
+        // Deposit SkyStone
+        // Move Tray
+        // Finish under bridge
     }
 
     /**

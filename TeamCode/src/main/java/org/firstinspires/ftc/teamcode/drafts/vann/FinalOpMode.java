@@ -17,8 +17,6 @@ public class FinalOpMode extends OpMode {
     private static final double DEAD_ZONE = 0.1;
 
     // Dynamic Values
-    private boolean useWrist = true; // Debug
-    private boolean useLatch = true; // Debug
     private double speed = 0.75;
 
     // Wheels
@@ -126,18 +124,6 @@ public class FinalOpMode extends OpMode {
         //    Gamepad 2    //
         /////////////////////
 
-        if (gamepad2.dpad_up) {
-            useWrist = true;
-        } else if (gamepad2.dpad_down) {
-            useWrist = false;
-        }
-
-        if (gamepad2.dpad_left) {
-            useLatch = true;
-        } else if (gamepad2.dpad_right) {
-            useLatch = false;
-        }
-
         // Arm Handling
         arm.setPower(clip(gamepad2.right_stick_y));
 
@@ -145,13 +131,21 @@ public class FinalOpMode extends OpMode {
         leftGear.setPower(clip(gamepad2.left_trigger * (gamepad2.left_bumper ? -1 : 1)));
         rightGear.setPower(clip(gamepad2.right_trigger * (gamepad2.right_bumper ? -1 : 1)));
 
-        // Wrist Handling
-        if (useWrist) // Debugging
-            wrist.setPower((clip(gamepad2.right_stick_x) + 1.0) / 2.0);
+        // Handle Wrist
+        if (gamepad2.right_stick_x > 0.1) {
+            wrist.setPower(-1);
+        } else if (gamepad2.right_stick_x < -0.1) {
+            wrist.setPower(1);
+        } else {
+            wrist.setPower(0);
+        }
 
-        // Latch Handling
-        if (useLatch) // Debugging
-            latch.setPower((clip(gamepad2.right_stick_y) + 1.0) / 2.0);
+        // Handle Latch
+        if (!(-0.1 < gamepad2.right_stick_y && gamepad2.right_stick_y < 0.1)) {
+            latch.setPower(gamepad2.right_stick_y / 5);
+        } else {
+            latch.setPower(0);
+        }
 
 
         /////////////////////
