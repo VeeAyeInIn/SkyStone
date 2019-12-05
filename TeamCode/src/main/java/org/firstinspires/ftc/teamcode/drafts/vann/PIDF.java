@@ -4,14 +4,17 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+
 import java.util.Locale;
 
-@TeleOp(name = "Final", group = "Iterative OpMode")
-public class FinalOpMode extends OpMode {
+@TeleOp(name = "PIDF", group = "Iterative OpMode")
+public class PIDF extends OpMode {
 
     // Constants
     private static final double DEAD_ZONE = 0.1;
@@ -20,6 +23,7 @@ public class FinalOpMode extends OpMode {
     private boolean useWrist = true; // Debug
     private boolean useLatch = true; // Debug
     private double speed = 0.75;
+    private double p = 0;
 
     // Wheels
     private DcMotor leftFront;
@@ -32,7 +36,7 @@ public class FinalOpMode extends OpMode {
     private DcMotor rightGear;
 
     // Arm (PID)
-    private DcMotor arm;
+    private DcMotorEx arm;
 
     // Other
     private CRServo wrist;
@@ -59,7 +63,7 @@ public class FinalOpMode extends OpMode {
         rightGear = hardwareMap.dcMotor.get("rightGear");
 
         // Arm (Special Behaviours)
-        arm = hardwareMap.dcMotor.get("arm");
+        arm = (DcMotorEx) hardwareMap.dcMotor.get("arm");
 
         // Servos
         wrist = hardwareMap.crservo.get("wrist");
@@ -90,7 +94,8 @@ public class FinalOpMode extends OpMode {
         rightGear.setDirection(DcMotorSimple.Direction.FORWARD);
 
         // Arm
-        arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        arm.setMotorEnable();
+        arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         arm.setDirection(DcMotorSimple.Direction.FORWARD);
         arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
@@ -126,20 +131,28 @@ public class FinalOpMode extends OpMode {
         //    Gamepad 2    //
         /////////////////////
 
-        if (gamepad2.dpad_up) {
-            useWrist = true;
-        } else if (gamepad2.dpad_down) {
-            useWrist = false;
-        }
+        //if (gamepad2.dpad_up) {
+        //    useWrist = true;
+        //} else if (gamepad2.dpad_down) {
+        //    useWrist = false;
+        //}
 
-        if (gamepad2.dpad_left) {
-            useLatch = true;
-        } else if (gamepad2.dpad_right) {
-            useLatch = false;
-        }
+        //if (gamepad2.dpad_left) {
+        //    useLatch = true;
+        //} else if (gamepad2.dpad_right) {
+        //    useLatch = false;
+        //}
 
         // Arm Handling
-        arm.setPower(clip(gamepad2.right_stick_y));
+        //arm.setTargetPositionTolerance(p);
+        //arm.setPower(clip(gamepad2.right_stick_y));
+        p += gamepad2.left_stick_y / 3.0;
+        if (gamepad2.dpad_up) p = 0;
+        arm.setVelocity(p, AngleUnit.DEGREES);
+
+        if (gamepad2.dpad_left) p = 100;
+        else if (gamepad2.dpad_right) p = -100;
+        else p = 0;
 
         // Gears (Intake/Expulsion) Handling
         leftGear.setPower(clip(gamepad2.left_trigger * (gamepad2.left_bumper ? -1 : 1)));
@@ -150,8 +163,7 @@ public class FinalOpMode extends OpMode {
             wrist.setPower((clip(gamepad2.right_stick_x) + 1.0) / 2.0);
 
         // Latch Handling
-        if (useLatch) // Debugging
-            latch.setPower((clip(gamepad2.right_stick_y) + 1.0) / 2.0);
+        latch.setPower(clip(gamepad2.right_stick_y));
 
 
         /////////////////////
@@ -162,6 +174,8 @@ public class FinalOpMode extends OpMode {
         stat(wrist);
         stat(latch);
         stat(tray);
+
+        telemetry.addData("P", p);
 
         telemetry.update();
     }

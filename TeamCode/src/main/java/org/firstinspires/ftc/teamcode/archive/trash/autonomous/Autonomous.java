@@ -1,25 +1,21 @@
-package org.firstinspires.ftc.teamcode.drafts.vann;
+package org.firstinspires.ftc.teamcode.archive.trash.autonomous;
 
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.util.Locale;
 
-@TeleOp(name = "Final", group = "Iterative OpMode")
-public class FinalOpMode extends OpMode {
+@TeleOp(name = "Autonomous", group = "Linear OpMode")
+public class Autonomous extends LinearOpMode {
 
-    // Constants
-    private static final double DEAD_ZONE = 0.1;
-
-    // Dynamic Values
-    private boolean useWrist = true; // Debug
-    private boolean useLatch = true; // Debug
-    private double speed = 0.75;
+    // Data
+    private ElapsedTime time;
 
     // Wheels
     private DcMotor leftFront;
@@ -31,7 +27,7 @@ public class FinalOpMode extends OpMode {
     private DcMotor leftGear;
     private DcMotor rightGear;
 
-    // Arm (PID)
+    // Arm
     private DcMotor arm;
 
     // Other
@@ -40,7 +36,11 @@ public class FinalOpMode extends OpMode {
     private Servo tray;
 
     @Override
-    public void init() {
+    public void runOpMode() {
+
+        ///////////////////
+        //     Debug     //
+        ///////////////////
 
         // Find all devices
         for (HardwareDevice device : hardwareMap) {
@@ -49,6 +49,11 @@ public class FinalOpMode extends OpMode {
 
         // Now update the info
         telemetry.update();
+
+
+        ///////////////////
+        //     Motor     //
+        ///////////////////
 
         // DcMotors
         leftFront = hardwareMap.dcMotor.get("leftFront");
@@ -65,23 +70,19 @@ public class FinalOpMode extends OpMode {
         wrist = hardwareMap.crservo.get("wrist");
         latch = hardwareMap.crservo.get("latch");
         tray = hardwareMap.servo.get("tray");
-    }
 
-    @Override
-    public void init_loop() {
 
-    }
-
-    @Override
-    public void start() {
+        ///////////////////
+        //     Modes     //
+        ///////////////////
 
         // DcMotors
-        leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        leftRear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightRear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        leftGear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightGear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftGear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        rightGear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftFront.setDirection(DcMotorSimple.Direction.FORWARD);
         rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
         leftRear.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -90,7 +91,7 @@ public class FinalOpMode extends OpMode {
         rightGear.setDirection(DcMotorSimple.Direction.FORWARD);
 
         // Arm
-        arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         arm.setDirection(DcMotorSimple.Direction.FORWARD);
         arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
@@ -98,77 +99,17 @@ public class FinalOpMode extends OpMode {
         wrist.setDirection(DcMotorSimple.Direction.FORWARD);
         latch.setDirection(DcMotorSimple.Direction.FORWARD);
         tray.setDirection(Servo.Direction.FORWARD);
-    }
-
-    @Override
-    public void loop() {
-
-        /////////////////////
-        //    Gamepad 1    //
-        /////////////////////
-
-        // Dynamic Speed
-        if (gamepad1.a) {
-            speed = 1.00;
-        } else if (gamepad1.x) {
-            speed = 0.75;
-        } else if (gamepad1.y) {
-            speed = 0.50;
-        } else if (gamepad1.b) {
-            speed = 0.25;
-        }
-
-        // Movement
-        move(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x, speed);
 
 
-        /////////////////////
-        //    Gamepad 2    //
-        /////////////////////
+        ///////////////////
+        //     Setup     //
+        ///////////////////
 
-        if (gamepad2.dpad_up) {
-            useWrist = true;
-        } else if (gamepad2.dpad_down) {
-            useWrist = false;
-        }
+        // We finished setting up everything, but haven't started
+        waitForStart();
 
-        if (gamepad2.dpad_left) {
-            useLatch = true;
-        } else if (gamepad2.dpad_right) {
-            useLatch = false;
-        }
-
-        // Arm Handling
-        arm.setPower(clip(gamepad2.right_stick_y));
-
-        // Gears (Intake/Expulsion) Handling
-        leftGear.setPower(clip(gamepad2.left_trigger * (gamepad2.left_bumper ? -1 : 1)));
-        rightGear.setPower(clip(gamepad2.right_trigger * (gamepad2.right_bumper ? -1 : 1)));
-
-        // Wrist Handling
-        if (useWrist) // Debugging
-            wrist.setPower((clip(gamepad2.right_stick_x) + 1.0) / 2.0);
-
-        // Latch Handling
-        if (useLatch) // Debugging
-            latch.setPower((clip(gamepad2.right_stick_y) + 1.0) / 2.0);
-
-
-        /////////////////////
-        //      Debug      //
-        /////////////////////
-
-        stat(arm);
-        stat(wrist);
-        stat(latch);
-        stat(tray);
-
-        telemetry.update();
-    }
-
-    @Override
-    public void stop() {
-
+        // We need to keep track of time
+        time = new ElapsedTime();
     }
 
     /**
@@ -196,39 +137,15 @@ public class FinalOpMode extends OpMode {
      */
     private void move(final double x, final double y, final double r, final double multiplier) {
 
-        double dx = clip(x) * multiplier;
-        double dy = clip(y) * multiplier;
-        double dr = clip(r) * multiplier;
+        double dx = x * multiplier;
+        double dy = y * multiplier;
+        double dr = r * multiplier;
 
         // Change the power of everything
         leftFront.setPower(dy - dx + dr);
         rightFront.setPower(dy + dx - dr);
         leftRear.setPower(dy + dx + dr);
         rightRear.setPower(dy - dx - dr);
-    }
-
-    /**
-     * Functions similar to {@link com.qualcomm.robotcore.util.Range#clip(int, int, int)}, however,
-     * instead of keeping it in constraints, it wants outliers.
-     *
-     * @param min   minimum value it cannot be
-     * @param max   maximum value it cannot be
-     * @param check the value to check
-     * @return 0 if within bounds, else the check is returned
-     */
-    private double clip(final double min, final double max, final double check) {
-        return min < check && check < max ? 0 : check;
-    }
-
-    /**
-     * Uses the constant {@link #DEAD_ZONE} as the min (negative) and max (positive) values.
-     *
-     * @param check the value to check
-     * @return 0 if within bounds, else the check if returned
-     * @see #clip(double, double, double)
-     */
-    private double clip(final double check) {
-        return clip(-DEAD_ZONE, DEAD_ZONE, check);
     }
 
     /**
