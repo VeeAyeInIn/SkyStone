@@ -39,9 +39,8 @@ public class FinalOpMode extends OpMode {
     // Other
     private CRServo wrist;
     private CRServo latch;
+    private CRServo gate;
     private Servo tray;
-
-    private boolean debugArm = true;
 
     @Override
     public void init() {
@@ -68,6 +67,7 @@ public class FinalOpMode extends OpMode {
         // Servos
         wrist = hardwareMap.crservo.get("wrist");
         latch = hardwareMap.crservo.get("latch");
+        gate = hardwareMap.crservo.get("gate");
         tray = hardwareMap.servo.get("tray");
     }
 
@@ -90,8 +90,8 @@ public class FinalOpMode extends OpMode {
         rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
         leftRear.setDirection(DcMotorSimple.Direction.FORWARD);
         rightRear.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftGear.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightGear.setDirection(DcMotorSimple.Direction.FORWARD);
+        leftGear.setDirection(DcMotorSimple.Direction.FORWARD);
+        rightGear.setDirection(DcMotorSimple.Direction.REVERSE);
 
         // Arm
         arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -101,6 +101,7 @@ public class FinalOpMode extends OpMode {
         // Servos
         wrist.setDirection(DcMotorSimple.Direction.FORWARD);
         latch.setDirection(DcMotorSimple.Direction.FORWARD);
+        gate.setDirection(DcMotorSimple.Direction.FORWARD);
         tray.setDirection(Servo.Direction.FORWARD);
     }
 
@@ -131,21 +132,14 @@ public class FinalOpMode extends OpMode {
         /////////////////////
 
         // Arm Handling
-        if (gamepad2.a && debugArm) {
-            velocity++;
-            debugArm = false;
-        } else if (!gamepad2.a && !debugArm) {
-            debugArm = true;
+        if (gamepad2.left_stick_y < -DEAD_ZONE) {
+            velocity = 50;
+        } else if (gamepad2.left_stick_y > DEAD_ZONE) {
+            velocity = -50;
+        } else if (gamepad2.left_stick_button) {
+            velocity = 13;
         }
-        if (gamepad2.b && debugArm) {
-            velocity--;
-            debugArm = false;
-        } else if (!gamepad2.b && !debugArm) {
-            debugArm = true;
-        }
-        if (gamepad2.left_stick_button) {
-            velocity = 0;
-        }
+
         arm.setVelocity(velocity, AngleUnit.DEGREES);
 
         // Gears (Intake/Expulsion) Handling
@@ -166,6 +160,13 @@ public class FinalOpMode extends OpMode {
             latch.setPower(gamepad2.right_stick_y / 5);
         } else {
             latch.setPower(0);
+        }
+
+        // Handle Gate
+        if (gamepad2.dpad_up) {
+            gate.setPower(0.25);
+        } else if (gamepad2.dpad_down) {
+            gate.setPower(-0.25);
         }
 
 
