@@ -6,12 +6,11 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.teamcode.util.QuadMecanumAutonomous;
 
 import java.util.HashMap;
 import java.util.Map;
 @TeleOp(name = "ConnorIsABully", group = "Autonomous")
-public class KarpovichAutoOpMode extends QuadMecanumAutonomous {
+public class KarpovichAutoOpMode {
 
     private DcMotor rightFront;
     private DcMotor leftFront;
@@ -26,97 +25,99 @@ public class KarpovichAutoOpMode extends QuadMecanumAutonomous {
     public double rBE;
     public double lBE;
     
+    public boolean i = false;
+    
     //Run this method on startup
     public void Main(){
         power = 0;
         //Move forward slightly before scanning for the skystone
-        while(/*Encoder value is below set value*/) {
-            forward(power);
-        }
-        stop();
+        while(/*Encoder value is below set value*/ i)
+            //forward(power);
+        
+        //stop();
 
         //wait for a tiny bit
 
         //Strafe while scanning for the skystone
-        while(/*skystone is not detected*/){
+        while(/*skystone is not detected*/i)
             righty(power);
-        }
-        stop();
+        
+        //stop();
 
         //Move forward to the skystone
-        while(/*Encoder value is below set value*/) {
-            forward(power);
+        while(/*Encoder value is below set value*/i) {
+            //forward(power);
         }
-        stop();
+        //stop();
 
         //grab block
 
         //Move forward with the block before turning to go across the middle
-        while(/*Encoder value is below set value*/) {
-            forward(power);
+        while(/*Encoder value is below set value*/i) {
+            //forward(power);
         }
-        stop();
+        //stop();
 
         //Rotate 90 degrees to go towards the center
-        while(/*Encoder value is below set value*/) {
+        while(/*Encoder value is below set value*/i) {
             rotate(rpower);
         }
-        stop();
+        //stop();
 
         //Go towards the middle
-        while(/*Encoder value is below set value*/) {
-            forward(power);
+        while(/*Encoder value is below set value*/i) {
+            //forward(power);
         }
-        stop();
+        //stop();
 
         //Rotate 90 degrees to go towards our gate
-        while(/*Encoder value is below set value*/) {
+        while(/*Encoder value is below set value*/i) {
             rotate(rpower);
         }
-        stop();
+        //stop();
 
         //Go towards the the area infront of our gate
-        while(/*Encoder value is below set value*/) {
-            forward(power);
+        while(/*Encoder value is below set value*/i) {
+            //forward(power);
         }
-        stop();
+        //stop();
 
         //Rotate 90 degrees towards our gate
-        while(/*Encoder value is below set value*/) {
+        while(/*Encoder value is below set value*/i) {
             rotate(rpower);
         }
-        stop();
+        //stop();
     }
     //Strafe Right (WIP)
     public void righty(double power){
-        strafe(power);
+        //strafe(power);
     }
     //Strafe Left (WIP)
     public void lefty(double power){
-        strafe(-power);
+        //strafe(-power);
     }
 
-    @Override
+    //@Override
     public void runOpMode() throws InterruptedException {
 
     }
 
-    @Override
+    //@Override
     public void backward(double power, DcMotor... motors) {
 
     }
 
-    @Override
+    //@Override
     public void left(double power, DcMotor... motors) {
 
     }
 
-    @Override
+    //@Override
     public void right(double power, DcMotor... motors) {
 
     }
 
-    @Override
+    //@Override
     public void rotate(double power, DcMotor... motors) {
 
     }
