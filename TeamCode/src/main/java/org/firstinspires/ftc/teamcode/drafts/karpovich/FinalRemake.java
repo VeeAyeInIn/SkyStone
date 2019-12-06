@@ -141,20 +141,20 @@ public class FinalRemake extends OpMode {
         }
         */
         // Arm Handling
-        arm.setPower(-clip(gamepad2.left_stick_y));
+        arm.setPower(-clip(gamepad2.left_stick_y)*0.8);
 
         // Gears (Intake/Expulsion) Handling
         if(gamepad2.right_trigger > 0.1){
-            rightGear.setPower(0.5);
-        } else if(gamepad2.right_bumper) {
             rightGear.setPower(-0.5);
+        } else if(gamepad2.right_bumper) {
+            rightGear.setPower(0.5);
         } else {
             rightGear.setPower(0.0);
         }
         if(gamepad2.left_trigger > 0.1){
-            leftGear.setPower(0.5);
-        } else if(gamepad2.left_bumper) {
             leftGear.setPower(-0.5);
+        } else if(gamepad2.left_bumper) {
+            leftGear.setPower(0.5);
         } else {
             leftGear.setPower(0.0);
         }
@@ -172,7 +172,7 @@ public class FinalRemake extends OpMode {
         if(gamepad2.dpad_left){
             latch.setPower(.5);
         } else if (gamepad2.dpad_right){
-            latch.setPower(.5);
+            latch.setPower(-.5);
         } else {
             latch.setPower(0);
         }
