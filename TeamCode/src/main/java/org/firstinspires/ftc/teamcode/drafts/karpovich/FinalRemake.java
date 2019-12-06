@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import java.util.Locale;
 
-@TeleOp(name = "Final", group = "Iterative OpMode")
+@TeleOp(name = "Final Remake", group = "Iterative OpMode")
 public class FinalRemake extends OpMode {
 
     // Constants

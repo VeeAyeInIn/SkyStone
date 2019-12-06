@@ -4,9 +4,12 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.Servo;
+
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 import java.util.Locale;
 
@@ -18,6 +21,7 @@ public class FinalOpMode extends OpMode {
 
     // Dynamic Values
     private double speed = 0.75;
+    private double velocity = 0;
 
     // Wheels
     private DcMotor leftFront;
@@ -30,12 +34,14 @@ public class FinalOpMode extends OpMode {
     private DcMotor rightGear;
 
     // Arm (PID)
-    private DcMotor arm;
+    private DcMotorEx arm;
 
     // Other
     private CRServo wrist;
     private CRServo latch;
     private Servo tray;
+
+    private boolean debugArm = true;
 
     @Override
     public void init() {
@@ -57,7 +63,7 @@ public class FinalOpMode extends OpMode {
         rightGear = hardwareMap.dcMotor.get("rightGear");
 
         // Arm (Special Behaviours)
-        arm = hardwareMap.dcMotor.get("arm");
+        arm = (DcMotorEx) hardwareMap.dcMotor.get("arm");
 
         // Servos
         wrist = hardwareMap.crservo.get("wrist");
@@ -125,7 +131,22 @@ public class FinalOpMode extends OpMode {
         /////////////////////
 
         // Arm Handling
-        arm.setPower(clip(gamepad2.right_stick_y));
+        if (gamepad2.a && debugArm) {
+            velocity++;
+            debugArm = false;
+        } else if (!gamepad2.a && !debugArm) {
+            debugArm = true;
+        }
+        if (gamepad2.b && debugArm) {
+            velocity--;
+            debugArm = false;
+        } else if (!gamepad2.b && !debugArm) {
+            debugArm = true;
+        }
+        if (gamepad2.left_stick_button) {
+            velocity = 0;
+        }
+        arm.setVelocity(velocity, AngleUnit.DEGREES);
 
         // Gears (Intake/Expulsion) Handling
         leftGear.setPower(clip(gamepad2.left_trigger * (gamepad2.left_bumper ? -1 : 1)));
@@ -157,6 +178,7 @@ public class FinalOpMode extends OpMode {
         stat(latch);
         stat(tray);
 
+        telemetry.addData("Velocity", velocity);
         telemetry.update();
     }
 
