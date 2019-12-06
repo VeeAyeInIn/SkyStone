@@ -4,9 +4,12 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.Servo;
+
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 import java.util.Locale;
 
@@ -17,9 +20,8 @@ public class FinalOpMode extends OpMode {
     private static final double DEAD_ZONE = 0.1;
 
     // Dynamic Values
-    private boolean useWrist = true; // Debug
-    private boolean useLatch = true; // Debug
     private double speed = 0.75;
+    private double velocity = 0;
 
     // Wheels
     private DcMotor leftFront;
@@ -32,12 +34,14 @@ public class FinalOpMode extends OpMode {
     private DcMotor rightGear;
 
     // Arm (PID)
-    private DcMotor arm;
+    private DcMotorEx arm;
 
     // Other
     private CRServo wrist;
     private CRServo latch;
     private Servo tray;
+
+    private boolean debugArm = true;
 
     @Override
     public void init() {
@@ -59,7 +63,7 @@ public class FinalOpMode extends OpMode {
         rightGear = hardwareMap.dcMotor.get("rightGear");
 
         // Arm (Special Behaviours)
-        arm = hardwareMap.dcMotor.get("arm");
+        arm = (DcMotorEx) hardwareMap.dcMotor.get("arm");
 
         // Servos
         wrist = hardwareMap.crservo.get("wrist");
@@ -126,32 +130,43 @@ public class FinalOpMode extends OpMode {
         //    Gamepad 2    //
         /////////////////////
 
-        if (gamepad2.dpad_up) {
-            useWrist = true;
-        } else if (gamepad2.dpad_down) {
-            useWrist = false;
-        }
-
-        if (gamepad2.dpad_left) {
-            useLatch = true;
-        } else if (gamepad2.dpad_right) {
-            useLatch = false;
-        }
-
         // Arm Handling
-        arm.setPower(clip(gamepad2.right_stick_y));
+        if (gamepad2.a && debugArm) {
+            velocity++;
+            debugArm = false;
+        } else if (!gamepad2.a && !debugArm) {
+            debugArm = true;
+        }
+        if (gamepad2.b && debugArm) {
+            velocity--;
+            debugArm = false;
+        } else if (!gamepad2.b && !debugArm) {
+            debugArm = true;
+        }
+        if (gamepad2.left_stick_button) {
+            velocity = 0;
+        }
+        arm.setVelocity(velocity, AngleUnit.DEGREES);
 
         // Gears (Intake/Expulsion) Handling
         leftGear.setPower(clip(gamepad2.left_trigger * (gamepad2.left_bumper ? -1 : 1)));
         rightGear.setPower(clip(gamepad2.right_trigger * (gamepad2.right_bumper ? -1 : 1)));
 
-        // Wrist Handling
-        if (useWrist) // Debugging
-            wrist.setPower((clip(gamepad2.right_stick_x) + 1.0) / 2.0);
+        // Handle Wrist
+        if (gamepad2.right_stick_x > 0.1) {
+            wrist.setPower(-1);
+        } else if (gamepad2.right_stick_x < -0.1) {
+            wrist.setPower(1);
+        } else {
+            wrist.setPower(0);
+        }
 
-        // Latch Handling
-        if (useLatch) // Debugging
-            latch.setPower((clip(gamepad2.right_stick_y) + 1.0) / 2.0);
+        // Handle Latch
+        if (!(-0.1 < gamepad2.right_stick_y && gamepad2.right_stick_y < 0.1)) {
+            latch.setPower(gamepad2.right_stick_y / 5);
+        } else {
+            latch.setPower(0);
+        }
 
 
         /////////////////////
@@ -163,6 +178,7 @@ public class FinalOpMode extends OpMode {
         stat(latch);
         stat(tray);
 
+        telemetry.addData("Velocity", velocity);
         telemetry.update();
     }
 
