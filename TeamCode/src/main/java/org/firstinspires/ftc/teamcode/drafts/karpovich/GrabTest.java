@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import java.util.Locale;
 
-@TeleOp(name = "GrabTest", group = "Iterative OpMode")
+@TeleOp(name = "GrabTest", group = "TeleOp")
 public class GrabTest extends OpMode {
     private Servo grabber;
     private CRServo gate;
