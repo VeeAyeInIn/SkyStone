@@ -4,42 +4,34 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+@TeleOp(name = "$", group = "Iterative OpMode")
+public class BoredOpMode extends OpMode {
 
-import java.util.Locale;
-
-@TeleOp(name = "Final", group = "Iterative OpMode")
-public class FinalOpMode extends OpMode {
-
-    // Constants
+    // Constant Values
     private static final double DEAD_ZONE = 0.1;
 
     // Dynamic Values
-    private double speed = 0.75;
-    private double velocity = 0;
+    private double speed = 0.75; // Normal
 
-    // Wheels
+    // DcMotors
     private DcMotor leftFront;
     private DcMotor rightFront;
     private DcMotor leftRear;
     private DcMotor rightRear;
-
-    // Intake Gears
     private DcMotor leftGear;
     private DcMotor rightGear;
+    private DcMotor arm;
 
-    // Arm (PID)
-    private DcMotorEx arm;
-
-    // Other
+    // CRServos
     private CRServo wrist;
     private CRServo latch;
     private CRServo gate;
+
+    // Servos
     private Servo tray;
 
     @Override
@@ -47,27 +39,28 @@ public class FinalOpMode extends OpMode {
 
         // Find all devices
         for (HardwareDevice device : hardwareMap) {
-            telemetry.addData(device.getDeviceName(), "has been detected.\n");
+            telemetry.addData(device.getDeviceName() + ": " + device.getConnectionInfo(),
+                    "This device has been found!");
         }
 
-        // Now update the info
+        // Display everything previously shown
         telemetry.update();
 
-        // DcMotors
+        // Initialize DcMotors
         leftFront = hardwareMap.dcMotor.get("leftFront");
         rightFront = hardwareMap.dcMotor.get("rightFront");
         leftRear = hardwareMap.dcMotor.get("leftRear");
         rightRear = hardwareMap.dcMotor.get("rightRear");
         leftGear = hardwareMap.dcMotor.get("leftGear");
         rightGear = hardwareMap.dcMotor.get("rightGear");
+        arm = hardwareMap.dcMotor.get("arm");
 
-        // Arm (Special Behaviours)
-        arm = (DcMotorEx) hardwareMap.dcMotor.get("arm");
-
-        // Servos
+        // Initialize CRServos
         wrist = hardwareMap.crservo.get("wrist");
         latch = hardwareMap.crservo.get("latch");
         gate = hardwareMap.crservo.get("gate");
+
+        // Initialize Servos
         tray = hardwareMap.servo.get("tray");
     }
 
@@ -79,105 +72,92 @@ public class FinalOpMode extends OpMode {
     @Override
     public void start() {
 
-        // DcMotors
+        // Setup DcMotor modes
         leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leftRear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightRear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leftGear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightGear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        // Setup DcMotor directions
         leftFront.setDirection(DcMotorSimple.Direction.FORWARD);
         rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
         leftRear.setDirection(DcMotorSimple.Direction.FORWARD);
         rightRear.setDirection(DcMotorSimple.Direction.REVERSE);
         leftGear.setDirection(DcMotorSimple.Direction.FORWARD);
         rightGear.setDirection(DcMotorSimple.Direction.REVERSE);
+        arm.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        // Arm
-        arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        arm.setDirection(DcMotorSimple.Direction.FORWARD);
-        arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        // Servos
+        // Setup CRServo directions
         wrist.setDirection(DcMotorSimple.Direction.FORWARD);
         latch.setDirection(DcMotorSimple.Direction.FORWARD);
         gate.setDirection(DcMotorSimple.Direction.FORWARD);
+
+        // Setup Servo directions
         tray.setDirection(Servo.Direction.FORWARD);
+
+        // Arm Behaviour
+        arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+
+        // Handle Debugging
+        telemetry.clearAll();
     }
 
     @Override
     public void loop() {
 
-        /////////////////////
-        //    Gamepad 1    //
-        /////////////////////
-
-        // Dynamic Speed
+        // Dynamic Speed Updates
         if (gamepad1.a) {
-            speed = 1.00;
+            speed = 1.00; // Fast
         } else if (gamepad1.x) {
-            speed = 0.75;
+            speed = 0.75; // Normal
         } else if (gamepad1.y) {
-            speed = 0.50;
+            speed = 0.50; // Slow
         } else if (gamepad1.b) {
-            speed = 0.25;
+            speed = 0.25; // Very Slow
         }
 
-        // Movement
-        move(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x, speed);
+        // Handle Movement
+        this.move(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x, speed);
 
-
-        /////////////////////
-        //    Gamepad 2    //
-        /////////////////////
-
-        // Arm Handling
-        if (gamepad2.left_stick_y < -DEAD_ZONE) {
-            velocity = 150;
+        // Handle Left Gear
+        if (gamepad2.left_bumper) {
+            leftGear.setPower(-clip(gamepad2.left_trigger));
         } else {
-            velocity = 0;
+            leftGear.setPower(+clip(gamepad2.left_trigger));
         }
 
-        arm.setVelocity(velocity, AngleUnit.DEGREES);
+        // Handle Right Gear
+        if (gamepad2.right_bumper) {
+            rightGear.setPower(-clip(gamepad2.right_trigger));
+        } else {
+            rightGear.setPower(+clip(gamepad2.right_trigger));
+        }
 
-        // Gears (Intake/Expulsion) Handling
-        leftGear.setPower(clip(gamepad2.left_trigger * (gamepad2.left_bumper ? -1 : 1)));
-        rightGear.setPower(clip(gamepad2.right_trigger * (gamepad2.right_bumper ? -1 : 1)));
+        // Handle Arm
+        arm.setPower(clip(gamepad2.left_stick_y) / 2.0);
 
         // Handle Wrist
-        if (gamepad2.right_stick_x > 0.1) {
-            wrist.setPower(-1);
-        } else if (gamepad2.right_stick_x < -0.1) {
-            wrist.setPower(1);
-        } else {
-            wrist.setPower(0);
-        }
+        wrist.setPower(clip(gamepad2.right_stick_x));
 
         // Handle Latch
-        if (!(-0.1 < gamepad2.right_stick_y && gamepad2.right_stick_y < 0.1)) {
-            latch.setPower(gamepad2.right_stick_y / 5);
-        } else {
-            latch.setPower(0);
+        latch.setPower(clip(gamepad2.right_stick_y));
+
+        // Debug Data
+        for (HardwareDevice device : hardwareMap) {
+            if (device instanceof DcMotor) {
+                telemetry.addData(hardwareMap.getNamesOf(device).toArray()[0].toString(),
+                        "POW " + ((DcMotor) device).getPower());
+            } else if (device instanceof CRServo) {
+                telemetry.addData(hardwareMap.getNamesOf(device).toArray()[0].toString(),
+                        "POW " + ((CRServo) device).getPower());
+            } else if (device instanceof Servo) {
+                telemetry.addData(hardwareMap.getNamesOf(device).toArray()[0].toString(),
+                        "POS " + ((Servo) device).getPosition());
+            }
         }
-
-        // Handle Gate
-        if (gamepad2.dpad_up) {
-            gate.setPower(0.25);
-        } else if (gamepad2.dpad_down) {
-            gate.setPower(-0.25);
-        }
-
-
-        /////////////////////
-        //      Debug      //
-        /////////////////////
-
-        stat(arm);
-        stat(wrist);
-        stat(latch);
-        stat(tray);
-
-        telemetry.addData("Velocity", velocity);
         telemetry.update();
     }
 
@@ -244,35 +224,5 @@ public class FinalOpMode extends OpMode {
      */
     private double clip(final double check) {
         return clip(-DEAD_ZONE, DEAD_ZONE, check);
-    }
-
-    /**
-     * Adds to the telemetry basic stats of a {@link HardwareDevice}, however only uses 3 main types
-     * as others are not used. See {@link DcMotor}, {@link CRServo}, and {@link Servo}.
-     *
-     * @param device what device to assess
-     * @see #telemetry
-     */
-    private void stat(HardwareDevice device) {
-        if (device instanceof DcMotor) {
-            telemetry.addData("DCMOTOR " + device.getDeviceName(), String.format(Locale.ENGLISH,
-                    "Port: %d   Power: %.2f   Busy: %b",
-                    ((DcMotor) device).getPortNumber(),
-                    ((DcMotor) device).getPower(),
-                    ((DcMotor) device).isBusy()));
-        } else if (device instanceof CRServo) {
-            telemetry.addData("CRSERVO " + device.getDeviceName(), String.format(Locale.ENGLISH,
-                    "Port: %d   Power: %.2f",
-                    ((CRServo) device).getPortNumber(),
-                    ((CRServo) device).getPower()));
-        } else if (device instanceof Servo) {
-            telemetry.addData("SERVO " + device.getDeviceName(), String.format(Locale.ENGLISH,
-                    "Port: %d   Position: %.2f",
-                    ((Servo) device).getPortNumber(),
-                    ((Servo) device).getPosition()));
-        } else {
-            telemetry.addData("UNKNOWN " + device.getDeviceName(), String.format(Locale.ENGLISH,
-                    "Info: %s", device.getConnectionInfo()));
-        }
     }
 }
