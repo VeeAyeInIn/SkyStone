@@ -24,7 +24,7 @@ public class Auto2ElBoo {
     private CRServo latch;
     private Servo tray;
 
-    boolean i = false;
+    private boolean i = false;
 
     public void e(){
         //Move forward a bit
