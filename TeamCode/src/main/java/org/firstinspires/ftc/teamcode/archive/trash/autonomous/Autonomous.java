@@ -14,6 +14,9 @@ import java.util.Locale;
 @TeleOp(name = "Autonomous", group = "Linear OpMode")
 public class Autonomous extends LinearOpMode {
 
+    // Constants
+    private final double WHEEL_CIRCUMFERENCE = 4.0 * Math.PI; // In inches
+
     // Data
     private ElapsedTime time;
 
@@ -33,6 +36,7 @@ public class Autonomous extends LinearOpMode {
     // Other
     private CRServo wrist;
     private CRServo latch;
+    private CRServo gate;
     private Servo tray;
 
     @Override
@@ -69,6 +73,7 @@ public class Autonomous extends LinearOpMode {
         // Servos
         wrist = hardwareMap.crservo.get("wrist");
         latch = hardwareMap.crservo.get("latch");
+        gate = hardwareMap.crservo.get("gate");
         tray = hardwareMap.servo.get("tray");
 
 
@@ -87,8 +92,8 @@ public class Autonomous extends LinearOpMode {
         rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
         leftRear.setDirection(DcMotorSimple.Direction.FORWARD);
         rightRear.setDirection(DcMotorSimple.Direction.REVERSE);
-        leftGear.setDirection(DcMotorSimple.Direction.REVERSE);
-        rightGear.setDirection(DcMotorSimple.Direction.FORWARD);
+        leftGear.setDirection(DcMotorSimple.Direction.FORWARD);
+        rightGear.setDirection(DcMotorSimple.Direction.REVERSE);
 
         // Arm
         arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -98,6 +103,7 @@ public class Autonomous extends LinearOpMode {
         // Servos
         wrist.setDirection(DcMotorSimple.Direction.FORWARD);
         latch.setDirection(DcMotorSimple.Direction.FORWARD);
+        gate.setDirection(DcMotorSimple.Direction.FORWARD);
         tray.setDirection(Servo.Direction.FORWARD);
 
 
@@ -110,6 +116,12 @@ public class Autonomous extends LinearOpMode {
 
         // We need to keep track of time
         time = new ElapsedTime();
+
+        move(0, 0, 1, 0.75);
+
+        while (time.seconds() < time.startTime() + 10) {
+            idle();
+        }
 
         // Handle finding SkyStone
         // Head to tray under bridge
