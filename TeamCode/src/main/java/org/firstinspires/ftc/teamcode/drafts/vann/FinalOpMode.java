@@ -39,7 +39,7 @@ public class FinalOpMode extends OpMode {
     // Other
     private CRServo wrist;
     private CRServo latch;
-    private CRServo gate;
+    private Servo gate;
     private Servo tray;
 
     @Override
@@ -67,7 +67,7 @@ public class FinalOpMode extends OpMode {
         // Servos
         wrist = hardwareMap.crservo.get("wrist");
         latch = hardwareMap.crservo.get("latch");
-        gate = hardwareMap.crservo.get("gate");
+        gate = hardwareMap.servo.get("gate");
         tray = hardwareMap.servo.get("tray");
     }
 
@@ -101,7 +101,7 @@ public class FinalOpMode extends OpMode {
         // Servos
         wrist.setDirection(DcMotorSimple.Direction.FORWARD);
         latch.setDirection(DcMotorSimple.Direction.FORWARD);
-        gate.setDirection(DcMotorSimple.Direction.FORWARD);
+        gate.setDirection(Servo.Direction.FORWARD);
         tray.setDirection(Servo.Direction.FORWARD);
     }
 
@@ -161,10 +161,21 @@ public class FinalOpMode extends OpMode {
         }
 
         // Handle Gate
+        if (gamepad2.x) {
+            gate.setDirection(Servo.Direction.FORWARD);
+            gate.setPosition(gate.getPosition() + 0.1);
+        }
+
+        if (gamepad2.y) {
+            gate.setDirection(Servo.Direction.REVERSE);
+            gate.setPosition(gate.getPosition() + 0.1);
+        }
+
+        // Handle Tray
         if (gamepad2.dpad_up) {
-            gate.setPower(0.25);
+            tray.setPosition(0);
         } else if (gamepad2.dpad_down) {
-            gate.setPower(-0.25);
+            tray.setPosition(1);
         }
 
 

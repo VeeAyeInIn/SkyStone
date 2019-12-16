@@ -29,7 +29,7 @@ public class BoredOpMode extends OpMode {
     // CRServos
     private CRServo wrist;
     private CRServo latch;
-    private CRServo gate;
+    private Servo gate;
 
     // Servos
     private Servo tray;
@@ -58,7 +58,7 @@ public class BoredOpMode extends OpMode {
         // Initialize CRServos
         wrist = hardwareMap.crservo.get("wrist");
         latch = hardwareMap.crservo.get("latch");
-        gate = hardwareMap.crservo.get("gate");
+        gate = hardwareMap.servo.get("gate");
 
         // Initialize Servos
         tray = hardwareMap.servo.get("tray");
@@ -93,7 +93,7 @@ public class BoredOpMode extends OpMode {
         // Setup CRServo directions
         wrist.setDirection(DcMotorSimple.Direction.FORWARD);
         latch.setDirection(DcMotorSimple.Direction.FORWARD);
-        gate.setDirection(DcMotorSimple.Direction.FORWARD);
+        gate.setDirection(Servo.Direction.FORWARD);
 
         // Setup Servo directions
         tray.setDirection(Servo.Direction.FORWARD);
@@ -137,13 +137,27 @@ public class BoredOpMode extends OpMode {
         }
 
         // Handle Arm
-        arm.setPower(clip(gamepad2.left_stick_y) / 2.0);
+        arm.setPower(Math.min(clip(-gamepad2.left_stick_y), 0));
 
         // Handle Wrist
         wrist.setPower(clip(gamepad2.right_stick_x));
 
         // Handle Latch
         latch.setPower(clip(gamepad2.right_stick_y));
+
+        // Handle Tray
+        if (gamepad2.dpad_up) {
+            tray.setPosition(1);
+        } else if (gamepad2.dpad_down) {
+            tray.setPosition(0);
+        }
+
+        // Handle Gate
+        if (gamepad2.x) {
+            gate.setPosition(0.30);
+        } else if (gamepad2.y) {
+            gate.setPosition(0.85);
+        }
 
         // Debug Data
         for (HardwareDevice device : hardwareMap) {

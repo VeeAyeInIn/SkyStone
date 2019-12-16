@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.archive.trash.autonomous;
+package org.firstinspires.ftc.teamcode.drafts.vann;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -11,8 +11,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.util.Locale;
 
-@TeleOp(name = "Autonomous", group = "Linear OpMode")
-public class Autonomous extends LinearOpMode {
+@TeleOp(name = "Foundation Grabber", group = "Linear OpMode")
+public class FoundIt extends LinearOpMode {
 
     // Constants
     private final double WHEEL_CIRCUMFERENCE = 4.0 * Math.PI; // In inches
@@ -36,7 +36,7 @@ public class Autonomous extends LinearOpMode {
     // Other
     private CRServo wrist;
     private CRServo latch;
-    private Servo gate;
+    private CRServo gate;
     private Servo tray;
 
     @Override
@@ -73,7 +73,7 @@ public class Autonomous extends LinearOpMode {
         // Servos
         wrist = hardwareMap.crservo.get("wrist");
         latch = hardwareMap.crservo.get("latch");
-        gate = hardwareMap.servo.get("gate");
+        gate = hardwareMap.crservo.get("gate");
         tray = hardwareMap.servo.get("tray");
 
 
@@ -103,7 +103,7 @@ public class Autonomous extends LinearOpMode {
         // Servos
         wrist.setDirection(DcMotorSimple.Direction.FORWARD);
         latch.setDirection(DcMotorSimple.Direction.FORWARD);
-        gate.setDirection(Servo.Direction.FORWARD);
+        gate.setDirection(DcMotorSimple.Direction.FORWARD);
         tray.setDirection(Servo.Direction.FORWARD);
 
 
@@ -117,11 +117,26 @@ public class Autonomous extends LinearOpMode {
         // We need to keep track of time
         time = new ElapsedTime();
 
-        move(0, 1, 0, 1);
+        tray.setPosition(1);
+        move(0, -0.25, 0, 1);
 
-        while (time.nanoseconds() < time.startTimeNanoseconds() + (2.7 * 1000000000)) {
+        while (time.nanoseconds() < time.startTimeNanoseconds() + (4.0 * 1000000000)) {
+            idle();
+            move(0, 0, 0);
+        }
+
+        tray.setPosition(0);
+
+        while (time.nanoseconds() < time.startTimeNanoseconds() + (5.0 * 1000000000)) {
+            move(0, 0, 0);
             idle();
         }
+
+        while (time.nanoseconds() < time.startTimeNanoseconds() + (9.0 * 1000000000)) {
+            move(0, 0.25, 0, 1);
+        }
+
+        stop();
 
         // Handle finding SkyStone
         // Head to tray under bridge
