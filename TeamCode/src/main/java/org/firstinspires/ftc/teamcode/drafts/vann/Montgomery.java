@@ -84,6 +84,11 @@ public class Montgomery extends LinearOpMode {
         leftRear.setTargetPosition(leftRear.getCurrentPosition() + (int) (distance * COUNTS_PER_INCH));
         rightRear.setTargetPosition(rightRear.getCurrentPosition() + (int) (distance * COUNTS_PER_INCH));
 
+        telemetry.addData("leftFront Target:", "%.2f", leftFront.getTargetPosition());
+        telemetry.addData("rightFront Target:", "%.2f", rightFront.getTargetPosition());
+        telemetry.addData("leftRear Target:", "%.2f", leftRear.getTargetPosition());
+        telemetry.addData("rightRear Target:", "%.2f", rightRear.getTargetPosition());
+
         leftFront.setPower(speed);
         rightFront.setPower(speed);
         leftRear.setPower(speed);
