@@ -68,27 +68,26 @@ public class Montgomery extends LinearOpMode {
 
         waitForStart();
         runtime.reset();
-
-        move(DRIVE_SPEED, 12, 5);
-        Thread.sleep(5000);
-        rotate(TURN_SPEED, 90, 5);
-        Thread.sleep(5000);
-        strafe(DRIVE_SPEED, 12, 5);
     }
 
     private void move(double speed, double distance, double timeout) {
 
         final double runUntil = runtime.seconds() + timeout;
 
+        leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
         leftFront.setTargetPosition(leftFront.getCurrentPosition() + (int) (distance * COUNTS_PER_INCH));
         rightFront.setTargetPosition(rightFront.getCurrentPosition() + (int) (distance * COUNTS_PER_INCH));
         leftRear.setTargetPosition(leftRear.getCurrentPosition() + (int) (distance * COUNTS_PER_INCH));
         rightRear.setTargetPosition(rightRear.getCurrentPosition() + (int) (distance * COUNTS_PER_INCH));
 
-        leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        leftRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        telemetry.addData("leftFront Target:", "%.2f", leftFront.getTargetPosition());
+        telemetry.addData("rightFront Target:", "%.2f", rightFront.getTargetPosition());
+        telemetry.addData("leftRear Target:", "%.2f", leftRear.getTargetPosition());
+        telemetry.addData("rightRear Target:", "%.2f", rightRear.getTargetPosition());
 
         leftFront.setPower(speed);
         rightFront.setPower(speed);
@@ -110,72 +109,12 @@ public class Montgomery extends LinearOpMode {
         rightRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    private void strafe(double speed, double distance, double timeout) {
+    private void strafe(double speed, double distance) {
 
-        final double runUntil = runtime.seconds() + timeout;
-
-        leftFront.setTargetPosition(leftFront.getCurrentPosition() + (int) (distance * COUNTS_PER_INCH));
-        rightFront.setTargetPosition(rightFront.getCurrentPosition() - (int) (distance * COUNTS_PER_INCH));
-        leftRear.setTargetPosition(leftRear.getCurrentPosition() - (int) (distance * COUNTS_PER_INCH));
-        rightRear.setTargetPosition(rightRear.getCurrentPosition() + (int) (distance * COUNTS_PER_INCH));
-
-        leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        leftRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        leftFront.setPower(speed);
-        rightFront.setPower(speed);
-        leftRear.setPower(speed);
-        rightRear.setPower(speed);
-
-        while ((runtime.seconds() < runUntil) && (leftFront.isBusy() || rightFront.isBusy() || leftRear.isBusy() || rightRear.isBusy())) {
-            idle();
-        }
-
-        leftFront.setPower(0);
-        rightFront.setPower(0);
-        leftRear.setPower(0);
-        rightRear.setPower(0);
-
-        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    private void rotate(double speed, double angle, double timeout) {
+    private void rotate(double speed, double angle) {
 
-        final double runUntil = runtime.seconds() + timeout;
-
-        leftFront.setTargetPosition(leftFront.getCurrentPosition() + (int) (angle / 45 * COUNTS_PER_INCH));
-        rightFront.setTargetPosition(rightFront.getCurrentPosition() - (int) (angle / 45 * COUNTS_PER_INCH));
-        leftRear.setTargetPosition(leftRear.getCurrentPosition() + (int) (angle / 45 * COUNTS_PER_INCH));
-        rightRear.setTargetPosition(rightRear.getCurrentPosition() - (int) (angle / 45 * COUNTS_PER_INCH));
-
-        leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        leftRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        leftFront.setPower(speed);
-        rightFront.setPower(speed);
-        leftRear.setPower(speed);
-        rightRear.setPower(speed);
-
-        while ((runtime.seconds() < runUntil) && (leftFront.isBusy() || rightFront.isBusy() || leftRear.isBusy() || rightRear.isBusy())) {
-            idle();
-        }
-
-        leftFront.setPower(0);
-        rightFront.setPower(0);
-        leftRear.setPower(0);
-        rightRear.setPower(0);
-
-        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     private void setWheelPowers(double a, double b, double c, double d) {
