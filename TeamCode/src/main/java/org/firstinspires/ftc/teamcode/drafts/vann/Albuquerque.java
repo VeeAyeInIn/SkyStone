@@ -158,7 +158,7 @@ public class Albuquerque extends LinearOpMode {
         Thread.sleep((long) seconds * 1000);
     }
     
-    private void latchRun(double speed, double powerTime){
+    private void trayMove(double speed, double powerTime){
         runtime.reset();
         latch.setPower(speed);
         while (powerTime > runtime.seconds()){
