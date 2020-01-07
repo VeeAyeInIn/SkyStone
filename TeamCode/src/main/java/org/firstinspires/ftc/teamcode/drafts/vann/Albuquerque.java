@@ -19,6 +19,8 @@ public class Albuquerque extends LinearOpMode {
     private static final double WHEEL_CIRCUMFERENCE = WHEEL_RADIUS * Math.PI * 2;
     private static final double TICKS_PER_ROTATION = 1440;
     private static final double TICKS_PER_INCH = TICKS_PER_ROTATION / WHEEL_CIRCUMFERENCE;
+    private static final double ROTATION_RADIUS = Math.sqrt(245)/2;
+    private static final double ROTATION_CIRCUMFERENCE = ROTATION_RADIUS * Math.PI * 2;
 
     private ElapsedTime runtime;
 
@@ -45,7 +47,7 @@ public class Albuquerque extends LinearOpMode {
         runtime.reset();
 
         this.pause(1D);
-        this.move(63);
+        this.rotate(90);
     }
 
     private void setup() {
@@ -122,9 +124,53 @@ public class Albuquerque extends LinearOpMode {
 
     private void rotate(double degrees) {
 
+        leftFront.setTargetPosition((int) (ROTATION_CIRCUMFERENCE * (degrees/360)));
+        rightFront.setTargetPosition((int) (ROTATION_CIRCUMFERENCE * (degrees/360)));
+        leftRear.setTargetPosition((int) (ROTATION_CIRCUMFERENCE * (degrees/360)));
+        rightRear.setTargetPosition((int) (ROTATION_CIRCUMFERENCE * (degrees/360)));
+
+        leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        leftFront.setPower(-0.5);
+        rightFront.setPower(0.5);
+        leftRear.setPower(-0.5);
+        rightRear.setPower(0.5);
+
+        while (leftFront.isBusy() && rightFront.isBusy() && leftRear.isBusy() && rightRear.isBusy()) {
+            telemetry.addData("MOTOR LF", String.format(Locale.ENGLISH, "POS: %s, POW: %s", leftFront.getTargetPosition(), leftFront.getPower()));
+            telemetry.addData("MOTOR RF", String.format(Locale.ENGLISH, "POS: %s, POW: %s", rightFront.getTargetPosition(), rightFront.getPower()));
+            telemetry.addData("MOTOR LR", String.format(Locale.ENGLISH, "POS: %s, POW: %s", leftRear.getTargetPosition(), leftRear.getPower()));
+            telemetry.addData("MOTOR RR", String.format(Locale.ENGLISH, "POS: %s, POW: %s", rightRear.getTargetPosition(), rightRear.getPower()));
+            telemetry.update();
+            idle();
+        }
+
+        leftFront.setPower(0);
+        rightFront.setPower(0);
+        leftRear.setPower(0);
+        rightRear.setPower(0);
     }
 
     private void pause(double seconds) throws InterruptedException {
         Thread.sleep((long) seconds * 1000);
     }
+    
+    private void latchRun(double speed, double powerTime){
+        runtime.reset();
+        latch.setPower(speed);
+        while (powerTime > runtime.seconds()){
+            idle();
+        }
+        latch.setPower(0);
+    }
+    /*
+    I would avoid running by time, but I don't think we can. Please suggest a different way because
+    I hate this as much as you do.
+
+    TODO: Test latch for time
+     */
+
 }
