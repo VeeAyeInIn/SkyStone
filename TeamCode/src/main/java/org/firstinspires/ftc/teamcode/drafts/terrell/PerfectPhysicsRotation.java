@@ -1,16 +1,25 @@
-package org.firstinspires.ftc.teamcode.drafts.karpovich;
+package org.firstinspires.ftc.teamcode.drafts.terrell;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.util.Locale;
 
-@Autonomous (name = "SkystoneAuto", group = "DanielAuto")
-public class SkystoneAuto extends LinearOpMode {
+@Autonomous(name = "ROTATE", group = "Linear OpMode")
+public class PerfectPhysicsRotation extends LinearOpMode {
+
+    private static final double ROBOT_WIDTH_INCHES = 16.5;
+    private static final double ROBOT_LENGTH_INCHES = 18.0;
+    private static final double WHEEL_RADIUS = 2.0;
+    private static final double WHEEL_CIRCUMFERENCE = WHEEL_RADIUS * Math.PI * 2;
+    private static final double TICKS_PER_ROTATION = 1440;
+    private static final double TICKS_PER_INCH = TICKS_PER_ROTATION / WHEEL_CIRCUMFERENCE;
+    private static final double ROTATION_CIRCUMFERENCE = 12.20911544707 * Math.PI;
 
     private ElapsedTime runtime;
 
@@ -28,15 +37,20 @@ public class SkystoneAuto extends LinearOpMode {
     private Servo gate;
     private Servo tray;
 
-    private static final double ROBOT_WIDTH_INCHES = 16.5;
-    private static final double ROBOT_LENGTH_INCHES = 18.0;
-    private static final double WHEEL_RADIUS = 2.0;
-    private static final double WHEEL_CIRCUMFERENCE = WHEEL_RADIUS * Math.PI * 2;
-    private static final double TICKS_PER_ROTATION = 1440;
-    private static final double TICKS_PER_INCH = TICKS_PER_ROTATION / WHEEL_CIRCUMFERENCE;
-
     @Override
     public void runOpMode() throws InterruptedException {
+
+        this.setup();
+        this.waitForStart();
+
+        runtime.reset();
+
+        this.pause(1);
+        this.move(63);
+    }
+
+    private void setup() {
+
         runtime = new ElapsedTime();
 
         leftFront = hardwareMap.dcMotor.get("leftFront");
@@ -67,58 +81,15 @@ public class SkystoneAuto extends LinearOpMode {
         rightGear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        waitForStart();
-        runtime.reset();
-
-        //Test movement
-        this.move(10.0);
-        this.pause(1.0);
-        this.back(10.0);
-
-        //Actual Movement
-
-        //Move Forward
-        //Intake
-        //Move backwards
-        //Strafe over line
-        //Outtake block
-        //Strafe to line
-
+        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightFront.setDirection(DcMotorSimple.Direction.FORWARD);
+        leftRear.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightRear.setDirection(DcMotorSimple.Direction.FORWARD);
+        leftGear.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightGear.setDirection(DcMotorSimple.Direction.FORWARD);
     }
-    //Albuquerque move method
+
     private void move(double inches) {
-
-        leftFront.setTargetPosition((int) (TICKS_PER_INCH * inches * 63/76));
-        rightFront.setTargetPosition((int) (TICKS_PER_INCH * inches * 63/76));
-        leftRear.setTargetPosition((int) (TICKS_PER_INCH * inches * 63/76));
-        rightRear.setTargetPosition((int) (TICKS_PER_INCH * inches * 63/76));
-
-        leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        leftRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        leftFront.setPower(0.5);
-        rightFront.setPower(0.5);
-        leftRear.setPower(0.5);
-        rightRear.setPower(0.5);
-
-        while (leftFront.isBusy() && rightFront.isBusy() && leftRear.isBusy() && rightRear.isBusy()) {
-            telemetry.addData("MOTOR LF", String.format(Locale.ENGLISH, "POS: %s, POW: %s", leftFront.getTargetPosition(), leftFront.getPower()));
-            telemetry.addData("MOTOR RF", String.format(Locale.ENGLISH, "POS: %s, POW: %s", rightFront.getTargetPosition(), rightFront.getPower()));
-            telemetry.addData("MOTOR LR", String.format(Locale.ENGLISH, "POS: %s, POW: %s", leftRear.getTargetPosition(), leftRear.getPower()));
-            telemetry.addData("MOTOR RR", String.format(Locale.ENGLISH, "POS: %s, POW: %s", rightRear.getTargetPosition(), rightRear.getPower()));
-            telemetry.update();
-            idle();
-        }
-
-        leftFront.setPower(0);
-        rightFront.setPower(0);
-        leftRear.setPower(0);
-        rightRear.setPower(0);
-    }
-    //Reverse move method
-    private void back(double inches) {
 
         leftFront.setTargetPosition((int) (TICKS_PER_INCH * inches));
         rightFront.setTargetPosition((int) (TICKS_PER_INCH * inches));
@@ -130,11 +101,12 @@ public class SkystoneAuto extends LinearOpMode {
         leftRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        leftFront.setPower(-0.5);
-        rightFront.setPower(-0.5);
-        leftRear.setPower(-0.5);
-        rightRear.setPower(-0.5);
+        leftFront.setPower(0.5);
+        rightFront.setPower(0.5);
+        leftRear.setPower(0.5);
+        rightRear.setPower(0.5);
 
+        double start = runtime.seconds();
         while (leftFront.isBusy() && rightFront.isBusy() && leftRear.isBusy() && rightRear.isBusy()) {
             telemetry.addData("MOTOR LF", String.format(Locale.ENGLISH, "POS: %s, POW: %s", leftFront.getTargetPosition(), leftFront.getPower()));
             telemetry.addData("MOTOR RF", String.format(Locale.ENGLISH, "POS: %s, POW: %s", rightFront.getTargetPosition(), rightFront.getPower()));
@@ -144,12 +116,51 @@ public class SkystoneAuto extends LinearOpMode {
             idle();
         }
 
+        telemetry.addData("Movement Time", (runtime.seconds() - start) + " seconds");
+        telemetry.update();
+
         leftFront.setPower(0);
         rightFront.setPower(0);
         leftRear.setPower(0);
         rightRear.setPower(0);
     }
-    //Wait
+
+    private void rotate(double degrees){
+
+        leftFront.setTargetPosition((int) (TICKS_PER_INCH * ROTATION_CIRCUMFERENCE/degrees));
+        rightFront.setTargetPosition((int) (TICKS_PER_INCH * ROTATION_CIRCUMFERENCE/degrees));
+        leftRear.setTargetPosition((int) (TICKS_PER_INCH * ROTATION_CIRCUMFERENCE/degrees));
+        rightRear.setTargetPosition((int) (TICKS_PER_INCH * ROTATION_CIRCUMFERENCE/degrees));
+
+        leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        leftFront.setPower(-0.5);
+        rightFront.setPower(0.5);
+        leftRear.setPower(-0.5);
+        rightRear.setPower(0.5);
+
+        double start = runtime.seconds();
+        while (leftFront.isBusy() && rightFront.isBusy() && leftRear.isBusy() && rightRear.isBusy()) {
+            telemetry.addData("MOTOR LF", String.format(Locale.ENGLISH, "POS: %s, POW: %s", leftFront.getTargetPosition(), leftFront.getPower()));
+            telemetry.addData("MOTOR RF", String.format(Locale.ENGLISH, "POS: %s, POW: %s", rightFront.getTargetPosition(), rightFront.getPower()));
+            telemetry.addData("MOTOR LR", String.format(Locale.ENGLISH, "POS: %s, POW: %s", leftRear.getTargetPosition(), leftRear.getPower()));
+            telemetry.addData("MOTOR RR", String.format(Locale.ENGLISH, "POS: %s, POW: %s", rightRear.getTargetPosition(), rightRear.getPower()));
+            telemetry.update();
+            idle();
+        }
+
+        telemetry.addData("Movement Time", (runtime.seconds() - start) + " seconds");
+        telemetry.update();
+
+        leftFront.setPower(0);
+        rightFront.setPower(0);
+        leftRear.setPower(0);
+        rightRear.setPower(0);
+    }
+
     private void pause(double seconds) throws InterruptedException {
         Thread.sleep((long) seconds * 1000);
     }
