@@ -120,10 +120,10 @@ public class SkystoneAuto extends LinearOpMode {
     //Reverse move method
     private void back(double inches) {
 
-        leftFront.setTargetPosition((int) (TICKS_PER_INCH * inches));
-        rightFront.setTargetPosition((int) (TICKS_PER_INCH * inches));
-        leftRear.setTargetPosition((int) (TICKS_PER_INCH * inches));
-        rightRear.setTargetPosition((int) (TICKS_PER_INCH * inches));
+        leftFront.setTargetPosition((int) (TICKS_PER_INCH * inches * 63/76));
+        rightFront.setTargetPosition((int) (TICKS_PER_INCH * inches * 63/76));
+        leftRear.setTargetPosition((int) (TICKS_PER_INCH * inches * 63/76));
+        rightRear.setTargetPosition((int) (TICKS_PER_INCH * inches * 63/76));
 
         leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
