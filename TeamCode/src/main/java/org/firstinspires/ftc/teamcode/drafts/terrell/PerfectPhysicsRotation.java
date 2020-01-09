@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.drafts.vann;
+package org.firstinspires.ftc.teamcode.drafts.terrell;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -10,8 +10,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.util.Locale;
 
-@Autonomous(name = "Phil Swift", group = "Linear OpMode")
-public class Albuquerque extends LinearOpMode {
+@Autonomous(name = "ROTATE", group = "Linear OpMode")
+public class PerfectPhysicsRotation extends LinearOpMode {
 
     private static final double ROBOT_WIDTH_INCHES = 16.5;
     private static final double ROBOT_LENGTH_INCHES = 18.0;
@@ -125,8 +125,40 @@ public class Albuquerque extends LinearOpMode {
         rightRear.setPower(0);
     }
 
-    private void rotate(double degrees) {
+    private void rotate(double degrees){
 
+        leftFront.setTargetPosition((int) (TICKS_PER_INCH * ROTATION_CIRCUMFERENCE/degrees));
+        rightFront.setTargetPosition((int) (TICKS_PER_INCH * ROTATION_CIRCUMFERENCE/degrees));
+        leftRear.setTargetPosition((int) (TICKS_PER_INCH * ROTATION_CIRCUMFERENCE/degrees));
+        rightRear.setTargetPosition((int) (TICKS_PER_INCH * ROTATION_CIRCUMFERENCE/degrees));
+
+        leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        leftFront.setPower(-0.5);
+        rightFront.setPower(0.5);
+        leftRear.setPower(-0.5);
+        rightRear.setPower(0.5);
+
+        double start = runtime.seconds();
+        while (leftFront.isBusy() && rightFront.isBusy() && leftRear.isBusy() && rightRear.isBusy()) {
+            telemetry.addData("MOTOR LF", String.format(Locale.ENGLISH, "POS: %s, POW: %s", leftFront.getTargetPosition(), leftFront.getPower()));
+            telemetry.addData("MOTOR RF", String.format(Locale.ENGLISH, "POS: %s, POW: %s", rightFront.getTargetPosition(), rightFront.getPower()));
+            telemetry.addData("MOTOR LR", String.format(Locale.ENGLISH, "POS: %s, POW: %s", leftRear.getTargetPosition(), leftRear.getPower()));
+            telemetry.addData("MOTOR RR", String.format(Locale.ENGLISH, "POS: %s, POW: %s", rightRear.getTargetPosition(), rightRear.getPower()));
+            telemetry.update();
+            idle();
+        }
+
+        telemetry.addData("Movement Time", (runtime.seconds() - start) + " seconds");
+        telemetry.update();
+
+        leftFront.setPower(0);
+        rightFront.setPower(0);
+        leftRear.setPower(0);
+        rightRear.setPower(0);
     }
 
     private void pause(double seconds) throws InterruptedException {
