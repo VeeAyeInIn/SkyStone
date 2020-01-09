@@ -67,6 +67,9 @@ public class SkystoneAuto extends LinearOpMode {
         rightGear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        leftFront.setDirection(DcMotor.Direction.REVERSE);
+
+
         waitForStart();
         runtime.reset();
 
@@ -74,6 +77,7 @@ public class SkystoneAuto extends LinearOpMode {
         this.move(10.0);
         this.pause(2.0);
         this.back(10.0);
+        this.turn(12.3);
 
         //Actual Movement
 
@@ -149,6 +153,39 @@ public class SkystoneAuto extends LinearOpMode {
         leftRear.setPower(0);
         rightRear.setPower(0);
     }
+
+    private void turn(double inches) {
+
+        leftFront.setTargetPosition((int) (TICKS_PER_INCH * inches * 63/76));
+        rightFront.setTargetPosition((int) (TICKS_PER_INCH * inches * 63/76));
+        leftRear.setTargetPosition((int) (TICKS_PER_INCH * inches * 63/76));
+        rightRear.setTargetPosition((int) (TICKS_PER_INCH * inches * 63/76));
+
+        leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        leftFront.setPower(0.5);
+        rightFront.setPower(0.5);
+        leftRear.setPower(0.5);
+        rightRear.setPower(0.5);
+
+        while (leftFront.isBusy() && rightFront.isBusy() && leftRear.isBusy() && rightRear.isBusy()) {
+            telemetry.addData("MOTOR LF", String.format(Locale.ENGLISH, "POS: %s, POW: %s", leftFront.getTargetPosition(), leftFront.getPower()));
+            telemetry.addData("MOTOR RF", String.format(Locale.ENGLISH, "POS: %s, POW: %s", rightFront.getTargetPosition(), rightFront.getPower()));
+            telemetry.addData("MOTOR LR", String.format(Locale.ENGLISH, "POS: %s, POW: %s", leftRear.getTargetPosition(), leftRear.getPower()));
+            telemetry.addData("MOTOR RR", String.format(Locale.ENGLISH, "POS: %s, POW: %s", rightRear.getTargetPosition(), rightRear.getPower()));
+            telemetry.update();
+            idle();
+        }
+
+        leftFront.setPower(0);
+        rightFront.setPower(0);
+        leftRear.setPower(0);
+        rightRear.setPower(0);
+    }
+
     //Wait
     private void pause(double seconds) throws InterruptedException {
         Thread.sleep((long) seconds * 1000);
