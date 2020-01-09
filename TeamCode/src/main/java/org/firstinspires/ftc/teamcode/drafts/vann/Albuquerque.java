@@ -48,6 +48,9 @@ public class Albuquerque extends LinearOpMode {
 
         this.pause(1);
         this.move(63);
+        this.pause(3);
+        this.rotate(90);
+        this.move(12);
     }
 
     private void setup() {
@@ -128,6 +131,38 @@ public class Albuquerque extends LinearOpMode {
 
     private void rotate(double degrees) {
 
+        leftFront.setTargetPosition((int) (TICKS_PER_INCH * ROTATION_CIRCUMFERENCE * degrees / 360 * MOVEMENT_REDUCTION));
+        rightFront.setTargetPosition((int) (TICKS_PER_INCH * ROTATION_CIRCUMFERENCE * degrees / 360 * MOVEMENT_REDUCTION));
+        leftRear.setTargetPosition((int) (TICKS_PER_INCH * ROTATION_CIRCUMFERENCE * degrees / 360 * MOVEMENT_REDUCTION));
+        rightRear.setTargetPosition((int) (TICKS_PER_INCH * ROTATION_CIRCUMFERENCE * degrees / 360 * MOVEMENT_REDUCTION));
+
+        leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        leftFront.setPower(0.5);
+        rightFront.setPower(0.5);
+        leftRear.setPower(0.5);
+        rightRear.setPower(0.5);
+
+        double start = runtime.seconds();
+        while (leftFront.isBusy() && rightFront.isBusy() && leftRear.isBusy() && rightRear.isBusy()) {
+            telemetry.addData("MOTOR LF", String.format(Locale.ENGLISH, "POS: %s, POW: %s", leftFront.getTargetPosition(), leftFront.getPower()));
+            telemetry.addData("MOTOR RF", String.format(Locale.ENGLISH, "POS: %s, POW: %s", rightFront.getTargetPosition(), rightFront.getPower()));
+            telemetry.addData("MOTOR LR", String.format(Locale.ENGLISH, "POS: %s, POW: %s", leftRear.getTargetPosition(), leftRear.getPower()));
+            telemetry.addData("MOTOR RR", String.format(Locale.ENGLISH, "POS: %s, POW: %s", rightRear.getTargetPosition(), rightRear.getPower()));
+            telemetry.update();
+            idle();
+        }
+
+        telemetry.addData("Movement Time", (runtime.seconds() - start) + " seconds");
+        telemetry.update();
+
+        leftFront.setPower(0);
+        rightFront.setPower(0);
+        leftRear.setPower(0);
+        rightRear.setPower(0);
     }
 
     private void pause(double seconds) throws InterruptedException {

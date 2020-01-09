@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.util.Locale;
 
-@Autonomous(name = "ROTATE", group = "Linear OpMode")
+@Autonomous(name = "ROTATE... hopefully", group = "Linear OpMode")
 public class PerfectPhysicsRotation extends LinearOpMode {
 
     private static final double ROBOT_WIDTH_INCHES = 16.5;
@@ -19,7 +19,8 @@ public class PerfectPhysicsRotation extends LinearOpMode {
     private static final double WHEEL_CIRCUMFERENCE = WHEEL_RADIUS * Math.PI * 2;
     private static final double TICKS_PER_ROTATION = 1440;
     private static final double TICKS_PER_INCH = TICKS_PER_ROTATION / WHEEL_CIRCUMFERENCE;
-    private static final double ROTATION_CIRCUMFERENCE = 12.20911544707 * Math.PI;
+    private static final double ROTATION_DIAMETER = Math.sqrt(245);
+    private static final double ROTATION_CIRCUMFERENCE = ROTATION_DIAMETER * Math.PI;
 
     private ElapsedTime runtime;
 
@@ -77,8 +78,8 @@ public class PerfectPhysicsRotation extends LinearOpMode {
         rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         leftRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightRear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftGear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightGear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftGear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightGear.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -127,10 +128,10 @@ public class PerfectPhysicsRotation extends LinearOpMode {
 
     private void rotate(double degrees){
 
-        leftFront.setTargetPosition((int) (TICKS_PER_INCH * ROTATION_CIRCUMFERENCE/degrees));
-        rightFront.setTargetPosition((int) (TICKS_PER_INCH * ROTATION_CIRCUMFERENCE/degrees));
-        leftRear.setTargetPosition((int) (TICKS_PER_INCH * ROTATION_CIRCUMFERENCE/degrees));
-        rightRear.setTargetPosition((int) (TICKS_PER_INCH * ROTATION_CIRCUMFERENCE/degrees));
+        leftFront.setTargetPosition((int) (TICKS_PER_INCH * ROTATION_CIRCUMFERENCE * degrees/360 * -1));
+        rightFront.setTargetPosition((int) (TICKS_PER_INCH * ROTATION_CIRCUMFERENCE * degrees/360));
+        leftRear.setTargetPosition((int) (TICKS_PER_INCH * ROTATION_CIRCUMFERENCE * degrees/360 * -1));
+        rightRear.setTargetPosition((int) (TICKS_PER_INCH * ROTATION_CIRCUMFERENCE * degrees/360));
 
         leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -164,4 +165,51 @@ public class PerfectPhysicsRotation extends LinearOpMode {
     private void pause(double seconds) throws InterruptedException {
         Thread.sleep((long) seconds * 1000);
     }
+
+    private void trayMove(double position){
+        tray.setPosition(position);
+    }
+
+    private void moveWithGears(double inches){
+
+        leftFront.setTargetPosition((int) (TICKS_PER_INCH * inches));
+        rightFront.setTargetPosition((int) (TICKS_PER_INCH * inches));
+        leftRear.setTargetPosition((int) (TICKS_PER_INCH * inches));
+        rightRear.setTargetPosition((int) (TICKS_PER_INCH * inches));
+
+        leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        leftFront.setPower(0.5);
+        rightFront.setPower(0.5);
+        leftRear.setPower(0.5);
+        rightRear.setPower(0.5);
+
+        rightGear.setPower(0.5);
+        leftGear.setPower(0.5);
+
+        double start = runtime.seconds();
+        while (leftFront.isBusy() && rightFront.isBusy() && leftRear.isBusy() && rightRear.isBusy()) {
+            telemetry.addData("MOTOR LF", String.format(Locale.ENGLISH, "POS: %s, POW: %s", leftFront.getTargetPosition(), leftFront.getPower()));
+            telemetry.addData("MOTOR RF", String.format(Locale.ENGLISH, "POS: %s, POW: %s", rightFront.getTargetPosition(), rightFront.getPower()));
+            telemetry.addData("MOTOR LR", String.format(Locale.ENGLISH, "POS: %s, POW: %s", leftRear.getTargetPosition(), leftRear.getPower()));
+            telemetry.addData("MOTOR RR", String.format(Locale.ENGLISH, "POS: %s, POW: %s", rightRear.getTargetPosition(), rightRear.getPower()));
+            telemetry.update();
+            idle();
+        }
+
+        telemetry.addData("Movement Time", (runtime.seconds() - start) + " seconds");
+        telemetry.update();
+
+        leftFront.setPower(0);
+        rightFront.setPower(0);
+        leftRear.setPower(0);
+        rightRear.setPower(0);
+
+        rightGear.setPower(0);
+        leftGear.setPower(0);
+    }
+
 }
