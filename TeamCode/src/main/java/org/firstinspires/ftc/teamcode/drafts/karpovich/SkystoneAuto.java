@@ -98,9 +98,9 @@ public class SkystoneAuto extends LinearOpMode {
         leftRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        leftFront.setPower(0.5);
+        leftFront.setPower(-0.5);
         rightFront.setPower(0.5);
-        leftRear.setPower(0.5);
+        leftRear.setPower(-0.5);
         rightRear.setPower(0.5);
 
         while (leftFront.isBusy() && rightFront.isBusy() && leftRear.isBusy() && rightRear.isBusy()) {
@@ -130,9 +130,9 @@ public class SkystoneAuto extends LinearOpMode {
         leftRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        leftFront.setPower(-0.5);
+        leftFront.setPower(0.5);
         rightFront.setPower(-0.5);
-        leftRear.setPower(-0.5);
+        leftRear.setPower(0.5);
         rightRear.setPower(-0.5);
 
         while (leftFront.isBusy() && rightFront.isBusy() && leftRear.isBusy() && rightRear.isBusy()) {
