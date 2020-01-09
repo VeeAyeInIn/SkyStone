@@ -67,7 +67,7 @@ public class SkystoneAuto extends LinearOpMode {
         rightGear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        leftFront.setDirection(DcMotor.Direction.REVERSE);
+        //leftFront.setDirection(DcMotor.Direction.REVERSE);
 
 
         waitForStart();
