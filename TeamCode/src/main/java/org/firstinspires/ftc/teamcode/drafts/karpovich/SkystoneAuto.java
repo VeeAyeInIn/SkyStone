@@ -71,9 +71,9 @@ public class SkystoneAuto extends LinearOpMode {
         runtime.reset();
 
         //Test movement
-        this.move(2.0);
+        this.move(10.0);
         this.pause(1.0);
-        this.back(2.0);
+        this.back(10.0);
 
         //Actual Movement
 
