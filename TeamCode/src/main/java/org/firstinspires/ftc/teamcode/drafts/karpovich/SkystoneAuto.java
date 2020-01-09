@@ -88,9 +88,9 @@ public class SkystoneAuto extends LinearOpMode {
     //Albuquerque move method
     private void move(double inches) {
 
-        leftFront.setTargetPosition((int) (TICKS_PER_INCH * inches * 63/76));
+        leftFront.setTargetPosition((-1) * (int) (TICKS_PER_INCH * inches * 63/76));
         rightFront.setTargetPosition((int) (TICKS_PER_INCH * inches * 63/76));
-        leftRear.setTargetPosition((int) (TICKS_PER_INCH * inches * 63/76));
+        leftRear.setTargetPosition((-1) * (int) (TICKS_PER_INCH * inches * 63/76));
         rightRear.setTargetPosition((int) (TICKS_PER_INCH * inches * 63/76));
 
         leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -98,9 +98,9 @@ public class SkystoneAuto extends LinearOpMode {
         leftRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        leftFront.setPower(-0.5);
+        leftFront.setPower(0.5);
         rightFront.setPower(0.5);
-        leftRear.setPower(-0.5);
+        leftRear.setPower(0.5);
         rightRear.setPower(0.5);
 
         while (leftFront.isBusy() && rightFront.isBusy() && leftRear.isBusy() && rightRear.isBusy()) {
@@ -121,9 +121,9 @@ public class SkystoneAuto extends LinearOpMode {
     private void back(double inches) {
 
         leftFront.setTargetPosition((int) (TICKS_PER_INCH * inches * 63/76));
-        rightFront.setTargetPosition((int) (TICKS_PER_INCH * inches * 63/76));
+        rightFront.setTargetPosition((-1) * (int) (TICKS_PER_INCH * inches * 63/76));
         leftRear.setTargetPosition((int) (TICKS_PER_INCH * inches * 63/76));
-        rightRear.setTargetPosition((int) (TICKS_PER_INCH * inches * 63/76));
+        rightRear.setTargetPosition((-1) * (int) (TICKS_PER_INCH * inches * 63/76));
 
         leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
