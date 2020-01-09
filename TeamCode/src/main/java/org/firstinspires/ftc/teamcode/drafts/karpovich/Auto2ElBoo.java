@@ -26,7 +26,7 @@ public class Auto2ElBoo {
 
     private boolean i = false;
 
-    public void e(){
+    public void runOpMode(){
         //Move forward a bit
         moveDistance(0.5, 0.5, 0.0, 1.0, 1000);
 
