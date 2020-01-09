@@ -19,7 +19,8 @@ public class Albuquerque extends LinearOpMode {
     private static final double WHEEL_CIRCUMFERENCE = WHEEL_RADIUS * Math.PI * 2;
     private static final double TICKS_PER_ROTATION = 1440;
     private static final double TICKS_PER_INCH = TICKS_PER_ROTATION / WHEEL_CIRCUMFERENCE;
-    private static final double ROTATION_CIRCUMFERENCE = 12.20911544707 * Math.PI;
+    private static final double ROTATION_CIRCUMFERENCE = 49.17370311729;
+    private static final double MOVEMENT_REDUCTION = 3969.0 / 4864.0;
 
     private ElapsedTime runtime;
 
@@ -91,10 +92,10 @@ public class Albuquerque extends LinearOpMode {
 
     private void move(double inches) {
 
-        leftFront.setTargetPosition((int) (TICKS_PER_INCH * inches));
-        rightFront.setTargetPosition((int) (TICKS_PER_INCH * inches));
-        leftRear.setTargetPosition((int) (TICKS_PER_INCH * inches));
-        rightRear.setTargetPosition((int) (TICKS_PER_INCH * inches));
+        leftFront.setTargetPosition((int) (TICKS_PER_INCH * inches * MOVEMENT_REDUCTION));
+        rightFront.setTargetPosition((int) (TICKS_PER_INCH * inches * MOVEMENT_REDUCTION));
+        leftRear.setTargetPosition((int) (TICKS_PER_INCH * inches * MOVEMENT_REDUCTION));
+        rightRear.setTargetPosition((int) (TICKS_PER_INCH * inches * MOVEMENT_REDUCTION));
 
         leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
