@@ -23,7 +23,7 @@ public class SkystoneAuto extends LinearOpMode {
     private DcMotor rightGear;
     private DcMotor arm;
 
-    private CRServo latch;
+    private Servo latch;
     private CRServo wrist;
 
     private Servo gate;
@@ -48,7 +48,7 @@ public class SkystoneAuto extends LinearOpMode {
         rightGear = hardwareMap.dcMotor.get("rightGear");
         arm = hardwareMap.dcMotor.get("arm");
         wrist = hardwareMap.crservo.get("wrist");
-        latch = hardwareMap.crservo.get("latch");
+        latch = hardwareMap.servo.get("latch");
         tray = hardwareMap.servo.get("tray");
         gate = hardwareMap.servo.get("gate");
 
@@ -78,8 +78,9 @@ public class SkystoneAuto extends LinearOpMode {
         this.move(10.0);
         this.pause(2.0);
         this.back(10.0);
-        this.turn(12.3);
-
+        this.pause(2.0);
+        this.turn(100);
+/*
         //Actual Movement
 
         //Move Forward ~47 inches to the blocks
@@ -102,7 +103,7 @@ public class SkystoneAuto extends LinearOpMode {
         rightGear.setPower(0);
         //Strafe to line
         this.left(10);
-
+*/
     }
     //Albuquerque move method
     private void move(double inches) {
