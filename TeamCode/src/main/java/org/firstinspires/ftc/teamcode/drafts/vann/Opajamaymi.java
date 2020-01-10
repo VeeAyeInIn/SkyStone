@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareDevice;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
@@ -156,9 +155,9 @@ public class Opajamaymi extends OpMode {
 
         // Handle Latch
         if (gamepad2.right_stick_y > 0.1) {
-            latch.setPosition(Range.clip(latch.getPosition() + 0.05, 0, 1.0));
+            latch.setPosition(latch.getPosition() - 0.05);
         } else if (gamepad2.right_stick_y < -0.1) {
-            latch.setPosition(Range.clip(latch.getPosition() - 0.05, 0, 1.0));
+            latch.setPosition(latch.getPosition() + 0.05);
         }
 
         // Handle Gate
