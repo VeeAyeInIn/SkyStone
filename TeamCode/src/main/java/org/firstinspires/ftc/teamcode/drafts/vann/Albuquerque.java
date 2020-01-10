@@ -46,11 +46,9 @@ public class Albuquerque extends LinearOpMode {
 
         runtime.reset();
 
+        this.rotate(90);
         this.pause(1);
         this.move(63);
-        this.pause(3);
-        this.rotate(90);
-        this.move(12);
     }
 
     private void setup() {
@@ -95,6 +93,14 @@ public class Albuquerque extends LinearOpMode {
 
     private void move(double inches) {
 
+        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftGear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightGear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         leftFront.setTargetPosition((int) (TICKS_PER_INCH * inches * MOVEMENT_REDUCTION));
         rightFront.setTargetPosition((int) (TICKS_PER_INCH * inches * MOVEMENT_REDUCTION));
         leftRear.setTargetPosition((int) (TICKS_PER_INCH * inches * MOVEMENT_REDUCTION));
@@ -131,6 +137,14 @@ public class Albuquerque extends LinearOpMode {
 
     private void rotate(double degrees) {
 
+        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        leftGear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightGear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         leftFront.setTargetPosition((int) (TICKS_PER_INCH * ROTATION_CIRCUMFERENCE * degrees / 360 * MOVEMENT_REDUCTION));
         rightFront.setTargetPosition((int) (TICKS_PER_INCH * ROTATION_CIRCUMFERENCE * degrees / 360 * MOVEMENT_REDUCTION));
         leftRear.setTargetPosition((int) (TICKS_PER_INCH * ROTATION_CIRCUMFERENCE * degrees / 360 * MOVEMENT_REDUCTION));
@@ -141,9 +155,9 @@ public class Albuquerque extends LinearOpMode {
         leftRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        leftFront.setPower(0.5);
+        leftFront.setPower(-0.5);
         rightFront.setPower(0.5);
-        leftRear.setPower(0.5);
+        leftRear.setPower(-0.5);
         rightRear.setPower(0.5);
 
         double start = runtime.seconds();
