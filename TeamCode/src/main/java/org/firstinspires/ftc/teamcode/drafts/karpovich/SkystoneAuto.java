@@ -81,12 +81,26 @@ public class SkystoneAuto extends LinearOpMode {
 
         //Actual Movement
 
-        //Move Forward
+        //Move Forward ~47 inches to the blocks
+        this.move(47.0); //Should be close to right
         //Intake
+        leftGear.setPower(-1.0); //Could be reversed
+        rightGear.setPower(1.0); //Could be reversed
+        this.pause(2.0);
+        leftGear.setPower(0);
+        rightGear.setPower(0);
         //Move backwards
+        this.back(35.0); //Placeholder value
         //Strafe over line
+        this.right(20); //Placeholder Value
         //Outtake block
+        leftGear.setPower(1.0); //Could be reversed
+        rightGear.setPower(-1.0); //Could be reversed
+        this.pause(2.0);
+        leftGear.setPower(0);
+        rightGear.setPower(0);
         //Strafe to line
+        this.left(10);
 
     }
     //Albuquerque move method
@@ -153,13 +167,77 @@ public class SkystoneAuto extends LinearOpMode {
         leftRear.setPower(0);
         rightRear.setPower(0);
     }
-
+    //rotate
     private void turn(double inches) {
 
         leftFront.setTargetPosition((int) (TICKS_PER_INCH * inches * 63/76));
         rightFront.setTargetPosition((int) (TICKS_PER_INCH * inches * 63/76));
         leftRear.setTargetPosition((int) (TICKS_PER_INCH * inches * 63/76));
         rightRear.setTargetPosition((int) (TICKS_PER_INCH * inches * 63/76));
+
+        leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        leftFront.setPower(0.5);
+        rightFront.setPower(0.5);
+        leftRear.setPower(0.5);
+        rightRear.setPower(0.5);
+
+        while (leftFront.isBusy() && rightFront.isBusy() && leftRear.isBusy() && rightRear.isBusy()) {
+            telemetry.addData("MOTOR LF", String.format(Locale.ENGLISH, "POS: %s, POW: %s", leftFront.getTargetPosition(), leftFront.getPower()));
+            telemetry.addData("MOTOR RF", String.format(Locale.ENGLISH, "POS: %s, POW: %s", rightFront.getTargetPosition(), rightFront.getPower()));
+            telemetry.addData("MOTOR LR", String.format(Locale.ENGLISH, "POS: %s, POW: %s", leftRear.getTargetPosition(), leftRear.getPower()));
+            telemetry.addData("MOTOR RR", String.format(Locale.ENGLISH, "POS: %s, POW: %s", rightRear.getTargetPosition(), rightRear.getPower()));
+            telemetry.update();
+            idle();
+        }
+
+        leftFront.setPower(0);
+        rightFront.setPower(0);
+        leftRear.setPower(0);
+        rightRear.setPower(0);
+    }
+    //Right maybe?
+    private void right(double inches) {
+
+        leftFront.setTargetPosition((-1) * (int) (TICKS_PER_INCH * inches * 63/76));
+        rightFront.setTargetPosition((-1) * (int) (TICKS_PER_INCH * inches * 63/76));
+        leftRear.setTargetPosition((int) (TICKS_PER_INCH * inches * 63/76));
+        rightRear.setTargetPosition((int) (TICKS_PER_INCH * inches * 63/76));
+
+        leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        leftRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        leftFront.setPower(0.5);
+        rightFront.setPower(0.5);
+        leftRear.setPower(0.5);
+        rightRear.setPower(0.5);
+
+        while (leftFront.isBusy() && rightFront.isBusy() && leftRear.isBusy() && rightRear.isBusy()) {
+            telemetry.addData("MOTOR LF", String.format(Locale.ENGLISH, "POS: %s, POW: %s", leftFront.getTargetPosition(), leftFront.getPower()));
+            telemetry.addData("MOTOR RF", String.format(Locale.ENGLISH, "POS: %s, POW: %s", rightFront.getTargetPosition(), rightFront.getPower()));
+            telemetry.addData("MOTOR LR", String.format(Locale.ENGLISH, "POS: %s, POW: %s", leftRear.getTargetPosition(), leftRear.getPower()));
+            telemetry.addData("MOTOR RR", String.format(Locale.ENGLISH, "POS: %s, POW: %s", rightRear.getTargetPosition(), rightRear.getPower()));
+            telemetry.update();
+            idle();
+        }
+
+        leftFront.setPower(0);
+        rightFront.setPower(0);
+        leftRear.setPower(0);
+        rightRear.setPower(0);
+    }
+    //left maybe?
+    private void left(double inches) {
+
+        leftFront.setTargetPosition((int) (TICKS_PER_INCH * inches * 63/76));
+        rightFront.setTargetPosition((int) (TICKS_PER_INCH * inches * 63/76));
+        leftRear.setTargetPosition((-1) * (int) (TICKS_PER_INCH * inches * 63/76));
+        rightRear.setTargetPosition((-1) * (int) (TICKS_PER_INCH * inches * 63/76));
 
         leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
