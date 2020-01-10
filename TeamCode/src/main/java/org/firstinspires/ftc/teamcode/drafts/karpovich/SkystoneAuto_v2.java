@@ -23,7 +23,7 @@ public class SkystoneAuto_v2 extends LinearOpMode {
     private DcMotor rightGear;
     private DcMotor arm;
 
-    private CRServo latch;
+    private Servo latch;
     private CRServo wrist;
 
     private Servo gate;
@@ -48,7 +48,7 @@ public class SkystoneAuto_v2 extends LinearOpMode {
         rightGear = hardwareMap.dcMotor.get("rightGear");
         arm = hardwareMap.dcMotor.get("arm");
         wrist = hardwareMap.crservo.get("wrist");
-        latch = hardwareMap.crservo.get("latch");
+        latch = hardwareMap.servo.get("latch");
         tray = hardwareMap.servo.get("tray");
         gate = hardwareMap.servo.get("gate");
 
@@ -83,7 +83,7 @@ public class SkystoneAuto_v2 extends LinearOpMode {
         this.move(20.0);
         this.pause(1.0);
         this.back(20.0);
-        this.pause(1.0);
+        this.pause(2.0);
         this.turn(12.3);
         this.pause(1.0);
         leftGear.setPower(.5);
@@ -123,7 +123,7 @@ public class SkystoneAuto_v2 extends LinearOpMode {
 */
     }
     //Albuquerque move method
-    private void move(double inches) {
+    private void back(double inches) {
 
         leftFront.setTargetPosition((int) (TICKS_PER_INCH * inches * 63/76));
         rightFront.setTargetPosition((int) (TICKS_PER_INCH * inches * 63/76));
@@ -155,7 +155,7 @@ public class SkystoneAuto_v2 extends LinearOpMode {
         rightRear.setPower(0);
     }
     //Reverse move method
-    private void back(double inches) {
+    private void move(double inches) {
 
         leftFront.setTargetPosition((-1) * (int) (TICKS_PER_INCH * inches * 63/76));
         rightFront.setTargetPosition((-1) * (int) (TICKS_PER_INCH * inches * 63/76));

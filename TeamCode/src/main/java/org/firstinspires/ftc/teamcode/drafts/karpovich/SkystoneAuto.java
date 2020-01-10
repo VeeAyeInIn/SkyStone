@@ -23,7 +23,7 @@ public class SkystoneAuto extends LinearOpMode {
     private DcMotor rightGear;
     private DcMotor arm;
 
-    private CRServo latch;
+    private Servo latch;
     private CRServo wrist;
 
     private Servo gate;
@@ -48,7 +48,7 @@ public class SkystoneAuto extends LinearOpMode {
         rightGear = hardwareMap.dcMotor.get("rightGear");
         arm = hardwareMap.dcMotor.get("arm");
         wrist = hardwareMap.crservo.get("wrist");
-        latch = hardwareMap.crservo.get("latch");
+        latch = hardwareMap.servo.get("latch");
         tray = hardwareMap.servo.get("tray");
         gate = hardwareMap.servo.get("gate");
 
