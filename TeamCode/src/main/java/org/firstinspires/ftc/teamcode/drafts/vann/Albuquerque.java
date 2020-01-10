@@ -20,7 +20,8 @@ public class Albuquerque extends LinearOpMode {
     private static final double TICKS_PER_ROTATION = 1440;
     private static final double TICKS_PER_INCH = TICKS_PER_ROTATION / WHEEL_CIRCUMFERENCE;
     private static final double ROTATION_CIRCUMFERENCE = 49.17370311729;
-    private static final double MOVEMENT_REDUCTION = 3969.0 / 4864.0;
+    private static final double MOVEMENT_MODIFIER = 3969.0 / 4864.0;
+    private static final double ROTATION_MODIFIER = MOVEMENT_MODIFIER * 1.1;
 
     private ElapsedTime runtime;
 
@@ -45,9 +46,11 @@ public class Albuquerque extends LinearOpMode {
 
         runtime.reset();
 
+        move(0);
+        pause(1);
         move(12);
         pause(1);
-        rotate(90);
+        rotate(270);
         pause(1);
         move(51);
     }
@@ -102,10 +105,10 @@ public class Albuquerque extends LinearOpMode {
         rightGear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        leftFront.setTargetPosition((int) (TICKS_PER_INCH * inches * MOVEMENT_REDUCTION));
-        rightFront.setTargetPosition((int) (-TICKS_PER_INCH * inches * MOVEMENT_REDUCTION));
-        leftRear.setTargetPosition((int) (TICKS_PER_INCH * inches * MOVEMENT_REDUCTION));
-        rightRear.setTargetPosition((int) (-TICKS_PER_INCH * inches * MOVEMENT_REDUCTION));
+        leftFront.setTargetPosition((int) (TICKS_PER_INCH * inches * MOVEMENT_MODIFIER));
+        rightFront.setTargetPosition((int) (-TICKS_PER_INCH * inches * MOVEMENT_MODIFIER));
+        leftRear.setTargetPosition((int) (TICKS_PER_INCH * inches * MOVEMENT_MODIFIER));
+        rightRear.setTargetPosition((int) (-TICKS_PER_INCH * inches * MOVEMENT_MODIFIER));
 
         leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -138,15 +141,17 @@ public class Albuquerque extends LinearOpMode {
 
     private void rotate(double degrees) {
 
+        degrees %= 360;
+
         leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        leftFront.setTargetPosition((int) (TICKS_PER_INCH * ROTATION_CIRCUMFERENCE * degrees / 360 * MOVEMENT_REDUCTION));
-        rightFront.setTargetPosition((int) (TICKS_PER_INCH * ROTATION_CIRCUMFERENCE * degrees / 360 * MOVEMENT_REDUCTION));
-        leftRear.setTargetPosition((int) (TICKS_PER_INCH * ROTATION_CIRCUMFERENCE * degrees / 360 * MOVEMENT_REDUCTION));
-        rightRear.setTargetPosition((int) (TICKS_PER_INCH * ROTATION_CIRCUMFERENCE * degrees / 360 * MOVEMENT_REDUCTION));
+        leftFront.setTargetPosition((int) (TICKS_PER_INCH * ROTATION_CIRCUMFERENCE * degrees / 360 * ROTATION_MODIFIER));
+        rightFront.setTargetPosition((int) (TICKS_PER_INCH * ROTATION_CIRCUMFERENCE * degrees / 360 * ROTATION_MODIFIER));
+        leftRear.setTargetPosition((int) (TICKS_PER_INCH * ROTATION_CIRCUMFERENCE * degrees / 360 * ROTATION_MODIFIER));
+        rightRear.setTargetPosition((int) (TICKS_PER_INCH * ROTATION_CIRCUMFERENCE * degrees / 360 * ROTATION_MODIFIER));
 
         leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
