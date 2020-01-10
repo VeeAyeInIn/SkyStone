@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.util.Locale;
 
-@Autonomous (name = "SkystoneAuto", group = "DanielAuto")
+@Autonomous (name = "SkystoneAutov2", group = "DanielAuto")
 public class SkystoneAuto_v2 extends LinearOpMode {
 
     private ElapsedTime runtime;
