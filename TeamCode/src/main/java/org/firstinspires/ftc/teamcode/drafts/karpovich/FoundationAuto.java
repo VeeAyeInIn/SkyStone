@@ -4,14 +4,13 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.util.Locale;
 
-@Autonomous (name = "SkystoneAuto", group = "DanielAuto")
-public class SkystoneAuto extends LinearOpMode {
+@Autonomous (name = "FoundationAuto", group = "DanielAuto")
+public class FoundationAuto extends LinearOpMode {
 
     private ElapsedTime runtime;
 
@@ -68,7 +67,7 @@ public class SkystoneAuto extends LinearOpMode {
         rightGear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        leftFront.setDirection(DcMotor.Direction.FORWARD);
+        //leftFront.setDirection(DcMotor.Direction.REVERSE);
 
 
         waitForStart();
