@@ -47,6 +47,7 @@ public class Albuquerque extends LinearOpMode {
         runtime.reset();
 
         move(0);
+        rotate(0);
         pause(1);
         move(12);
         pause(1);
