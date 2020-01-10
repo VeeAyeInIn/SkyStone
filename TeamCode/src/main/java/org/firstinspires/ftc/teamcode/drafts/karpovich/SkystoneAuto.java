@@ -78,8 +78,8 @@ public class SkystoneAuto extends LinearOpMode {
         this.move(10.0);
         this.pause(2.0);
         this.back(10.0);
-        this.turn(12.3);
-
+        this.turn(100);
+/*
         //Actual Movement
 
         //Move Forward ~47 inches to the blocks
@@ -102,7 +102,7 @@ public class SkystoneAuto extends LinearOpMode {
         rightGear.setPower(0);
         //Strafe to line
         this.left(10);
-
+*/
     }
     //Albuquerque move method
     private void move(double inches) {

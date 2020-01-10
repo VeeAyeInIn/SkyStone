@@ -84,7 +84,7 @@ public class SkystoneAuto_v2 extends LinearOpMode {
         this.pause(1.0);
         this.back(20.0);
         this.pause(2.0);
-        this.turn(12.3);
+        this.turn(100);
         this.pause(1.0);
         leftGear.setPower(.5);
         rightGear.setPower(.5);
