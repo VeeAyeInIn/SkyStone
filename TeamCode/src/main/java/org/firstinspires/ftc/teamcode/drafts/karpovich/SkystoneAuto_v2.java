@@ -4,13 +4,14 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.util.Locale;
 
-@Autonomous (name = "FoundationAuto", group = "DanielAuto")
-public class FoundationAuto extends LinearOpMode {
+@Autonomous (name = "SkystoneAuto", group = "DanielAuto")
+public class SkystoneAuto_v2 extends LinearOpMode {
 
     private ElapsedTime runtime;
 
@@ -67,26 +68,66 @@ public class FoundationAuto extends LinearOpMode {
         rightGear.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         arm.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+        leftFront.setDirection(DcMotorSimple.Direction.FORWARD);
+        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftRear.setDirection(DcMotorSimple.Direction.FORWARD);
+        rightRear.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftGear.setDirection(DcMotorSimple.Direction.FORWARD);
+        rightGear.setDirection(DcMotorSimple.Direction.REVERSE);
 
 
         waitForStart();
         runtime.reset();
 
         //Test movement
-        this.move(10.0);
-        this.pause(2.0);
-        this.back(10.0);
+        this.move(20.0);
+        this.pause(1.0);
+        this.back(20.0);
+        this.pause(1.0);
         this.turn(12.3);
+        this.pause(1.0);
+        leftGear.setPower(.5);
+        rightGear.setPower(.5);
+        this.pause(1.0);
+        leftGear.setPower(0);
+        rightGear.setPower(0);
+        this.pause(1.0);
+        leftGear.setPower(-.5);
+        rightGear.setPower(-.5);
+        this.pause(1.0);
+        leftGear.setPower(0);
+        rightGear.setPower(0);
 
         //Actual Movement
-
+/*
+        //Move Forward ~47 inches to the blocks
+        this.move(47.0); //Should be close to right
+        //Intake
+        leftGear.setPower(-1.0); //Could be reversed
+        rightGear.setPower(1.0); //Could be reversed
+        this.pause(2.0);
+        leftGear.setPower(0);
+        rightGear.setPower(0);
+        //Move backwards
+        this.back(35.0); //Placeholder value
+        //Strafe over line
+        this.right(20); //Placeholder Value
+        //Outtake block
+        leftGear.setPower(1.0); //Could be reversed
+        rightGear.setPower(-1.0); //Could be reversed
+        this.pause(2.0);
+        leftGear.setPower(0);
+        rightGear.setPower(0);
+        //Strafe to line
+        this.left(10);
+*/
     }
     //Albuquerque move method
     private void move(double inches) {
 
-        leftFront.setTargetPosition((-1) * (int) (TICKS_PER_INCH * inches * 63/76));
+        leftFront.setTargetPosition((int) (TICKS_PER_INCH * inches * 63/76));
         rightFront.setTargetPosition((int) (TICKS_PER_INCH * inches * 63/76));
-        leftRear.setTargetPosition((-1) * (int) (TICKS_PER_INCH * inches * 63/76));
+        leftRear.setTargetPosition((int) (TICKS_PER_INCH * inches * 63/76));
         rightRear.setTargetPosition((int) (TICKS_PER_INCH * inches * 63/76));
 
         leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -116,9 +157,9 @@ public class FoundationAuto extends LinearOpMode {
     //Reverse move method
     private void back(double inches) {
 
-        leftFront.setTargetPosition((int) (TICKS_PER_INCH * inches * 63/76));
+        leftFront.setTargetPosition((-1) * (int) (TICKS_PER_INCH * inches * 63/76));
         rightFront.setTargetPosition((-1) * (int) (TICKS_PER_INCH * inches * 63/76));
-        leftRear.setTargetPosition((int) (TICKS_PER_INCH * inches * 63/76));
+        leftRear.setTargetPosition((-1) * (int) (TICKS_PER_INCH * inches * 63/76));
         rightRear.setTargetPosition((-1) * (int) (TICKS_PER_INCH * inches * 63/76));
 
         leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -148,9 +189,9 @@ public class FoundationAuto extends LinearOpMode {
     //rotate
     private void turn(double inches) {
 
-        leftFront.setTargetPosition((int) (TICKS_PER_INCH * inches * 63/76));
+        leftFront.setTargetPosition((-1) * (int) (TICKS_PER_INCH * inches * 63/76));
         rightFront.setTargetPosition((int) (TICKS_PER_INCH * inches * 63/76));
-        leftRear.setTargetPosition((int) (TICKS_PER_INCH * inches * 63/76));
+        leftRear.setTargetPosition((-1) * (int) (TICKS_PER_INCH * inches * 63/76));
         rightRear.setTargetPosition((int) (TICKS_PER_INCH * inches * 63/76));
 
         leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
