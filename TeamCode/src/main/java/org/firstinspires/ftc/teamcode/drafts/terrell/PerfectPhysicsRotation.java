@@ -138,9 +138,9 @@ public class PerfectPhysicsRotation extends LinearOpMode {
         leftRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightRear.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        leftFront.setPower(-0.5);
+        leftFront.setPower(0.5);
         rightFront.setPower(0.5);
-        leftRear.setPower(-0.5);
+        leftRear.setPower(0.5);
         rightRear.setPower(0.5);
 
         double start = runtime.seconds();
