@@ -81,13 +81,13 @@ public class SkystoneAuto_v2 extends LinearOpMode {
         this.setup();
         waitForStart();
         runtime.reset();
-
+/*
         //Test movement
         this.move(10.0);
         this.pause(1.0);
-        this.right(10.0);
+        //this.right(10.0);
         this.pause(2.0);
-        this.rotate(90);
+        this.rotate(90); //Divide actual by 5
         this.pause(1.0);
         leftGear.setPower(.5);
         rightGear.setPower(.5);
@@ -100,30 +100,11 @@ public class SkystoneAuto_v2 extends LinearOpMode {
         this.pause(1.0);
         leftGear.setPower(0);
         rightGear.setPower(0);
-
-        //Actual Movement
-/*
-        //Move Forward ~47 inches to the blocks
-        this.move(47.0); //Should be close to right
-        //Intake
-        leftGear.setPower(-1.0); //Could be reversed
-        rightGear.setPower(1.0); //Could be reversed
-        this.pause(2.0);
-        leftGear.setPower(0);
-        rightGear.setPower(0);
-        //Move backwards
-        this.back(35.0); //Placeholder value
-        //Strafe over line
-        this.right(20); //Placeholder Value
-        //Outtake block
-        leftGear.setPower(1.0); //Could be reversed
-        rightGear.setPower(-1.0); //Could be reversed
-        this.pause(2.0);
-        leftGear.setPower(0);
-        rightGear.setPower(0);
-        //Strafe to line
-        this.left(10);
 */
+        //Actual Movement
+
+        this.move(20);
+
     }
 
     private void setup() {
