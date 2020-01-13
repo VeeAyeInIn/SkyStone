@@ -51,7 +51,7 @@ public class FoundationAuto extends LinearOpMode {
 
         this.move(20);
         this.foundationDown();
-        this.move(-20);
+        this.move(0);
         this.foundationUp();
         this.rotate(14.0);
         this.move(20);
