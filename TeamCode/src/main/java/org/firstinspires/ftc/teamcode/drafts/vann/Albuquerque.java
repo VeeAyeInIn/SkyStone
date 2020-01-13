@@ -49,11 +49,12 @@ public class Albuquerque extends LinearOpMode {
         move(0);
         rotate(0);
         pause(1);
-        move(12);
-        pause(1);
-        rotate(270);
-        pause(1);
-        move(51);
+        move(20);
+        //move(12);
+        //pause(1);
+        //rotate(270);
+        //pause(1);
+        //move(51);
     }
 
     private void setup() {
@@ -107,9 +108,9 @@ public class Albuquerque extends LinearOpMode {
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         leftFront.setTargetPosition((int) (TICKS_PER_INCH * inches * MOVEMENT_MODIFIER));
-        rightFront.setTargetPosition((int) (-TICKS_PER_INCH * inches * MOVEMENT_MODIFIER));
+        rightFront.setTargetPosition((int) (TICKS_PER_INCH * inches * MOVEMENT_MODIFIER));
         leftRear.setTargetPosition((int) (TICKS_PER_INCH * inches * MOVEMENT_MODIFIER));
-        rightRear.setTargetPosition((int) (-TICKS_PER_INCH * inches * MOVEMENT_MODIFIER));
+        rightRear.setTargetPosition((int) (TICKS_PER_INCH * inches * MOVEMENT_MODIFIER));
 
         leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -149,9 +150,9 @@ public class Albuquerque extends LinearOpMode {
         leftRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightRear.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        leftFront.setTargetPosition((int) (TICKS_PER_INCH * ROTATION_CIRCUMFERENCE * degrees / 360 * ROTATION_MODIFIER));
+        leftFront.setTargetPosition((int) (-TICKS_PER_INCH * ROTATION_CIRCUMFERENCE * degrees / 360 * ROTATION_MODIFIER));
         rightFront.setTargetPosition((int) (TICKS_PER_INCH * ROTATION_CIRCUMFERENCE * degrees / 360 * ROTATION_MODIFIER));
-        leftRear.setTargetPosition((int) (TICKS_PER_INCH * ROTATION_CIRCUMFERENCE * degrees / 360 * ROTATION_MODIFIER));
+        leftRear.setTargetPosition((int) (-TICKS_PER_INCH * ROTATION_CIRCUMFERENCE * degrees / 360 * ROTATION_MODIFIER));
         rightRear.setTargetPosition((int) (TICKS_PER_INCH * ROTATION_CIRCUMFERENCE * degrees / 360 * ROTATION_MODIFIER));
 
         leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);

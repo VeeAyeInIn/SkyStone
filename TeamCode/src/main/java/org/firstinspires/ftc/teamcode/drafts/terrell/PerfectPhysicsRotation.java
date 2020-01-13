@@ -47,7 +47,7 @@ public class PerfectPhysicsRotation extends LinearOpMode {
         runtime.reset();
 
         this.pause(1);
-        this.move(63);
+        this.rotate(90);
     }
 
     private void setup() {
