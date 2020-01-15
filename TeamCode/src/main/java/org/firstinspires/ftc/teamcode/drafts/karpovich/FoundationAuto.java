@@ -110,9 +110,9 @@ public class FoundationAuto extends LinearOpMode {
         arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         leftFront.setTargetPosition((int) (TICKS_PER_INCH * inches * MOVEMENT_MODIFIER));
-        rightFront.setTargetPosition((int) (-TICKS_PER_INCH * inches * MOVEMENT_MODIFIER));
+        rightFront.setTargetPosition((int) (TICKS_PER_INCH * inches * MOVEMENT_MODIFIER));
         leftRear.setTargetPosition((int) (TICKS_PER_INCH * inches * MOVEMENT_MODIFIER));
-        rightRear.setTargetPosition((int) (-TICKS_PER_INCH * inches * MOVEMENT_MODIFIER));
+        rightRear.setTargetPosition((int) (TICKS_PER_INCH * inches * MOVEMENT_MODIFIER));
 
         leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
